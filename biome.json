@@ -1,0 +1,81 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "vcs": {
+    "enabled": false,
+    "clientKind": "git",
+    "useIgnoreFile": false
+  },
+  "files": {
+    "ignoreUnknown": false,
+    "ignore": []
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "tab"
+  },
+  "organizeImports": {
+    "enabled": true
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "all": true,
+      "style": {
+        "all": true,
+        "noDefaultExport": "off",
+        "useDefaultSwitchClause": "off",
+        "useNamingConvention": "off",
+        "useNodejsImportProtocol": "off",
+        "noNegationElse": "off"
+      },
+      "nursery": {
+        "all": true,
+        "useExplicitType": "off",
+        "useComponentExportOnlyModules": "off",
+        "noStaticElementInteractions": "off",
+        "noSecrets": "off"
+      },
+      "suspicious": {
+        "all": true,
+        "noReactSpecificProps": "off",
+        "noArrayIndexKey": "off",
+        "useAwait": "off",
+        "noConsole": {
+          "level": "warn",
+          "options": {
+            "allow": [
+              "error",
+              "info"
+            ]
+          }
+        }
+      },
+      "a11y": {
+        "all": true,
+        "useKeyWithClickEvents": "off"
+      },
+      "correctness": {
+        "all": true,
+        "noUndeclaredDependencies": "off",
+        "noNodejsModules": "off",
+        "noUndeclaredVariables": "off",
+        "useImportExtensions": "off"
+      },
+      "complexity": {
+        "all": true,
+        "noExcessiveCognitiveComplexity": "off",
+        "useSimplifiedLogicExpression": "off"
+      },
+      "security": {
+        "all": true,
+        "noDangerouslySetInnerHtml": "off"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "double",
+      "semicolons": "asNeeded"
+    }
+  }
+}
