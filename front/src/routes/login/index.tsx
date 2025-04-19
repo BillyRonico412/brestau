@@ -25,6 +25,7 @@ export const Route = createFileRoute("/login/")({
 	component: IndexComponent,
 	async beforeLoad() {
 		const session = await authClient.getSession()
+		console.log("session", session)
 		if (session.data) {
 			throw redirect({
 				to: "/admin",
@@ -67,6 +68,7 @@ function IndexComponent() {
 				onSuccess() {
 					toast.success("Connexion réussie")
 				},
+				credentials: "include",
 			},
 		)
 	}

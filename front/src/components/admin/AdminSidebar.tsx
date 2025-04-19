@@ -75,7 +75,6 @@ export const AdminSidebar = () => {
 					onClick={() => {
 						authClient.signOut({
 							fetchOptions: {
-								credentials: "include",
 								onError(context) {
 									console.error(context.error)
 									toast.error("Erreur lors de la déconnexion")
