@@ -33,7 +33,8 @@
         "useExplicitType": "off",
         "useComponentExportOnlyModules": "off",
         "noStaticElementInteractions": "off",
-        "noSecrets": "off"
+        "noSecrets": "off",
+        "noImgElement": "off"
       },
       "suspicious": {
         "all": true,

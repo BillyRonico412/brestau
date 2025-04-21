@@ -119,11 +119,14 @@ exports.Prisma.TransactionIsolationLevel = makeStrictEnum({
 
 exports.Prisma.CategoryScalarFieldEnum = {
   id: 'id',
+  title: 'title'
+};
+
+exports.Prisma.SubCategoryScalarFieldEnum = {
+  id: 'id',
   title: 'title',
-  description: 'description',
   image: 'image',
-  parentId: 'parentId',
-  type: 'type'
+  categoryId: 'categoryId'
 };
 
 exports.Prisma.FoodScalarFieldEnum = {
@@ -131,18 +134,18 @@ exports.Prisma.FoodScalarFieldEnum = {
   title: 'title',
   description: 'description',
   image: 'image',
-  categoryId: 'categoryId',
-  price: 'price'
+  subCategoryId: 'subCategoryId',
+  price: 'price',
+  estimatedTimeMn: 'estimatedTimeMn'
 };
 
 exports.Prisma.IngredientScalarFieldEnum = {
   id: 'id',
   title: 'title',
-  description: 'description',
   vegetarian: 'vegetarian',
   halal: 'halal',
-  gluten: 'gluten',
-  lactose: 'lactose'
+  noGluten: 'noGluten',
+  noLactose: 'noLactose'
 };
 
 exports.Prisma.UserScalarFieldEnum = {
@@ -152,7 +155,12 @@ exports.Prisma.UserScalarFieldEnum = {
   emailVerified: 'emailVerified',
   image: 'image',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  role: 'role',
+  banned: 'banned',
+  banReason: 'banReason',
+  banExpires: 'banExpires',
+  userType: 'userType'
 };
 
 exports.Prisma.SessionScalarFieldEnum = {
@@ -163,7 +171,8 @@ exports.Prisma.SessionScalarFieldEnum = {
   updatedAt: 'updatedAt',
   ipAddress: 'ipAddress',
   userAgent: 'userAgent',
-  userId: 'userId'
+  userId: 'userId',
+  impersonatedBy: 'impersonatedBy'
 };
 
 exports.Prisma.AccountScalarFieldEnum = {
@@ -205,15 +214,11 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
-exports.FoodType = exports.$Enums.FoodType = {
-  Entree: 'Entree',
-  Plat: 'Plat',
-  Dessert: 'Dessert',
-  Boisson: 'Boisson'
-};
+
 
 exports.Prisma.ModelName = {
   Category: 'Category',
+  SubCategory: 'SubCategory',
   Food: 'Food',
   Ingredient: 'Ingredient',
   User: 'User',

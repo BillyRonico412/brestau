@@ -14,6 +14,7 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AdminRouteImport } from './routes/admin/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as LoginIndexImport } from './routes/login/index'
+import { Route as AdminSubcategoriesIndexImport } from './routes/admin/subcategories/index'
 import { Route as AdminIngredientsIndexImport } from './routes/admin/ingredients/index'
 import { Route as AdminFoodsIndexImport } from './routes/admin/foods/index'
 import { Route as AdminCategoriesIndexImport } from './routes/admin/categories/index'
@@ -36,6 +37,12 @@ const LoginIndexRoute = LoginIndexImport.update({
   id: '/login/',
   path: '/login/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const AdminSubcategoriesIndexRoute = AdminSubcategoriesIndexImport.update({
+  id: '/subcategories/',
+  path: '/subcategories/',
+  getParentRoute: () => AdminRouteRoute,
 } as any)
 
 const AdminIngredientsIndexRoute = AdminIngredientsIndexImport.update({
@@ -102,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminIngredientsIndexImport
       parentRoute: typeof AdminRouteImport
     }
+    '/admin/subcategories/': {
+      id: '/admin/subcategories/'
+      path: '/subcategories'
+      fullPath: '/admin/subcategories'
+      preLoaderRoute: typeof AdminSubcategoriesIndexImport
+      parentRoute: typeof AdminRouteImport
+    }
   }
 }
 
@@ -111,12 +125,14 @@ interface AdminRouteRouteChildren {
   AdminCategoriesIndexRoute: typeof AdminCategoriesIndexRoute
   AdminFoodsIndexRoute: typeof AdminFoodsIndexRoute
   AdminIngredientsIndexRoute: typeof AdminIngredientsIndexRoute
+  AdminSubcategoriesIndexRoute: typeof AdminSubcategoriesIndexRoute
 }
 
 const AdminRouteRouteChildren: AdminRouteRouteChildren = {
   AdminCategoriesIndexRoute: AdminCategoriesIndexRoute,
   AdminFoodsIndexRoute: AdminFoodsIndexRoute,
   AdminIngredientsIndexRoute: AdminIngredientsIndexRoute,
+  AdminSubcategoriesIndexRoute: AdminSubcategoriesIndexRoute,
 }
 
 const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
@@ -130,6 +146,7 @@ export interface FileRoutesByFullPath {
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/foods': typeof AdminFoodsIndexRoute
   '/admin/ingredients': typeof AdminIngredientsIndexRoute
+  '/admin/subcategories': typeof AdminSubcategoriesIndexRoute
 }
 
 export interface FileRoutesByTo {
@@ -139,6 +156,7 @@ export interface FileRoutesByTo {
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/foods': typeof AdminFoodsIndexRoute
   '/admin/ingredients': typeof AdminIngredientsIndexRoute
+  '/admin/subcategories': typeof AdminSubcategoriesIndexRoute
 }
 
 export interface FileRoutesById {
@@ -149,6 +167,7 @@ export interface FileRoutesById {
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/foods/': typeof AdminFoodsIndexRoute
   '/admin/ingredients/': typeof AdminIngredientsIndexRoute
+  '/admin/subcategories/': typeof AdminSubcategoriesIndexRoute
 }
 
 export interface FileRouteTypes {
@@ -160,6 +179,7 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/foods'
     | '/admin/ingredients'
+    | '/admin/subcategories'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -168,6 +188,7 @@ export interface FileRouteTypes {
     | '/admin/categories'
     | '/admin/foods'
     | '/admin/ingredients'
+    | '/admin/subcategories'
   id:
     | '__root__'
     | '/'
@@ -176,6 +197,7 @@ export interface FileRouteTypes {
     | '/admin/categories/'
     | '/admin/foods/'
     | '/admin/ingredients/'
+    | '/admin/subcategories/'
   fileRoutesById: FileRoutesById
 }
 
@@ -214,7 +236,8 @@ export const routeTree = rootRoute
       "children": [
         "/admin/categories/",
         "/admin/foods/",
-        "/admin/ingredients/"
+        "/admin/ingredients/",
+        "/admin/subcategories/"
       ]
     },
     "/login/": {
@@ -230,6 +253,10 @@ export const routeTree = rootRoute
     },
     "/admin/ingredients/": {
       "filePath": "admin/ingredients/index.tsx",
+      "parent": "/admin"
+    },
+    "/admin/subcategories/": {
+      "filePath": "admin/subcategories/index.tsx",
       "parent": "/admin"
     }
   }

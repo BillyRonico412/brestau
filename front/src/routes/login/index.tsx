@@ -25,10 +25,9 @@ export const Route = createFileRoute("/login/")({
 	component: IndexComponent,
 	async beforeLoad() {
 		const session = await authClient.getSession()
-		console.log("session", session)
 		if (session.data) {
 			throw redirect({
-				to: "/admin",
+				to: "/admin/categories",
 			})
 		}
 	},
@@ -79,7 +78,10 @@ function IndexComponent() {
 				<h1 className={cn("font-bold font-display text-4xl")}>🍔 BResto 🍸</h1>
 				<Form {...form}>
 					<form
-						onSubmit={form.handleSubmit(onSubmit)}
+						onSubmit={(e) => {
+							e.stopPropagation()
+							form.handleSubmit(onSubmit)(e)
+						}}
 						className="w-full space-y-8"
 					>
 						<FormField

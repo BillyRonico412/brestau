@@ -1,9 +1,10 @@
-import { appRouter } from "@/routers/appRouter"
-import { auth } from "@/utils/auth"
 import { trpcServer } from "@hono/trpc-server"
 import { Hono } from "hono"
 import { cors } from "hono/cors"
 import { logger } from "hono/logger"
+import { appRouter } from "@back/routers/appRouter"
+import { auth } from "@back/utils/auth"
+import { envParsed } from "@back/utils/envParsed"
 
 const app = new Hono<{
 	Variables: {
@@ -19,7 +20,7 @@ app.use(logger())
 app.use(
 	"*",
 	cors({
-		origin: "http://127.0.0.1:5173", // replace with your origin
+		origin: envParsed.CORS_ORIGIN,
 		allowHeaders: ["Content-Type", "Authorization"],
 		allowMethods: ["POST", "GET", "OPTIONS"],
 		exposeHeaders: ["Content-Length"],
@@ -62,6 +63,14 @@ app.use(
 	"/trpc/*",
 	trpcServer({
 		router: appRouter,
+		createContext(_, c) {
+			const user = c.get("user")
+			const session = c.get("session")
+			return {
+				user,
+				session,
+			}
+		},
 	}),
 )
 

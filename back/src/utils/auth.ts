@@ -1,15 +1,23 @@
-import { prismaClient } from "@/utils/prisma"
+import { envParsed } from "@back/utils/envParsed"
+import { prismaClient } from "@back/utils/prisma"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
+import { admin } from "better-auth/plugins"
+
+export const UserType = {
+	ADMIN: "admin",
+	USER: "user",
+	COOK: "cook",
+} as const
 
 export const auth = betterAuth({
 	database: prismaAdapter(prismaClient, {
 		provider: "postgresql", // or "mysql", "postgresql", ...etc
 	}),
-	trustedOrigins: ["http://127.0.0.1:5173"], // Add your frontend URL here
+	trustedOrigins: [envParsed.CORS_ORIGIN], // Add your frontend URL here
 	emailAndPassword: {
 		enabled: true,
-		disableSignUp: true,
+		disableSignUp: false,
 	},
 	advanced: {
 		crossSubDomainCookies: {
@@ -19,6 +27,16 @@ export const auth = betterAuth({
 			sameSite: "None",
 			secure: true,
 			partitioned: true,
+		},
+	},
+	plugins: [admin()],
+	user: {
+		additionalFields: {
+			userType: {
+				type: "string",
+				required: true,
+				defaultValue: UserType.USER,
+			},
 		},
 	},
 })

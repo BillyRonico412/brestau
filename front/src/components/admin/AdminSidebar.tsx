@@ -15,7 +15,13 @@ import {
 import { authClient } from "@/lib/auth-client"
 import { cn } from "@/lib/utils"
 import { Link, useMatchRoute, useNavigate } from "@tanstack/react-router"
-import { BeefIcon, LayersIcon, LogOutIcon, PizzaIcon } from "lucide-react"
+import {
+	BeefIcon,
+	LayersIcon,
+	ListIcon,
+	LogOutIcon,
+	PizzaIcon,
+} from "lucide-react"
 import { toast } from "sonner"
 
 const items = [
@@ -23,6 +29,11 @@ const items = [
 		title: "Catégories",
 		url: "/admin/categories",
 		icon: LayersIcon,
+	},
+	{
+		title: "Sous-catégories",
+		url: "/admin/subcategories",
+		icon: ListIcon,
 	},
 	{
 		title: "Produits",

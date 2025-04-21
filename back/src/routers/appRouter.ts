@@ -1,15 +1,12 @@
-import { initTRPC } from "@trpc/server"
-import { z } from "zod"
-
-const t = initTRPC.create()
-
-const publicProcedure = t.procedure
-const router = t.router
+import { categoryRouter } from "@back/routers/categoryRouter"
+import { foodRouter } from "@back/routers/foodRouter"
+import { ingredientRouter } from "@back/routers/ingredientRouter"
+import { subCategoryRouter } from "@back/routers/subCategoryRouter"
+import { router } from "@back/utils/trpc"
 
 export const appRouter = router({
-	hello: publicProcedure.input(z.string().nullish()).query(({ input }) => {
-		return `Hello ${input ?? "World"}!`
-	}),
+	category: categoryRouter,
+	subCategory: subCategoryRouter,
+	food: foodRouter,
+	ingredient: ingredientRouter,
 })
-
-export type AppRouter = typeof appRouter

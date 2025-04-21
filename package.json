@@ -1,16 +1,18 @@
 {
   "name": "brestau",
   "module": "index.ts",
-  "type": "module",
+  "private": true,
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "typescript": "5.8.3"
+  },
+  "dependencies": {
+    "@trpc/client": "^11.1.0",
+    "@trpc/server": "^11.1.0"
   },
   "workspaces": [
     "front",
     "back"
-  ],
-  "peerDependencies": {
-    "typescript": "^5.0.0"
-  }
+  ]
 }

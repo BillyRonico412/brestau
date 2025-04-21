@@ -1,3 +1,4 @@
+import { AdminMain } from "@/components/admin/AdminMainLayout"
 import { AdminSidebar } from "@/components/admin/AdminSidebar"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { ThemeProvider } from "@/components/utils/theme-provider"
@@ -8,7 +9,6 @@ export const Route = createFileRoute("/admin")({
 	component: RouteComponent,
 	async beforeLoad(ctx) {
 		const session = await authClient.getSession()
-		console.log("sesion", session)
 		if (!session.data) {
 			throw redirect({
 				to: "/login",
@@ -27,9 +27,7 @@ function RouteComponent() {
 				<AdminSidebar />
 				<main className="flex h-dvh w-full flex-col overflow-hidden">
 					<SidebarTrigger />
-					<div className="flex w-full flex-1 overflow-hidden">
-						<Outlet />
-					</div>
+					<Outlet />
 				</main>
 			</SidebarProvider>
 		</ThemeProvider>
