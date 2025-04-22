@@ -54,7 +54,7 @@ export const AdminSidebar = () => {
 		<Sidebar>
 			<SidebarHeader>
 				<h1 className={cn("text-center font-bold font-display text-xl")}>
-					🍔 BResto 🍸
+					🍔 BRestau 🍸
 				</h1>
 			</SidebarHeader>
 			<SidebarContent>

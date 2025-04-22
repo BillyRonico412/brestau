@@ -1,5 +1,5 @@
 import { envParsed } from "@/lib/envParsed"
-import type { AppRouter } from "@back/export"
+import type { AppRouter } from "../../../back/src/export"
 import { QueryClient } from "@tanstack/react-query"
 import {
 	createTRPCClient,

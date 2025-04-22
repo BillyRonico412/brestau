@@ -5,6 +5,7 @@ import { logger } from "hono/logger"
 import { appRouter } from "@back/routers/appRouter"
 import { auth } from "@back/utils/auth"
 import { envParsed } from "@back/utils/envParsed"
+import { serve } from "@hono/node-server"
 
 const app = new Hono<{
 	Variables: {
@@ -16,6 +17,10 @@ const app = new Hono<{
 })
 
 app.use(logger())
+
+app.get("/hello", (c) => {
+	return c.text("Hello world!", 200)
+})
 
 app.use(
 	"*",
@@ -74,4 +79,12 @@ app.use(
 	}),
 )
 
-export default app
+serve(
+	{
+		port: 4000,
+		fetch: app.fetch,
+	},
+	(info) => {
+		console.log(`Server is running on http://localhost:${info.port}`)
+	},
+)

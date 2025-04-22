@@ -34,7 +34,8 @@
         "useComponentExportOnlyModules": "off",
         "noStaticElementInteractions": "off",
         "noSecrets": "off",
-        "noImgElement": "off"
+        "noImgElement": "off",
+        "useImportRestrictions": "off"
       },
       "suspicious": {
         "all": true,

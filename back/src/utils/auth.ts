@@ -12,9 +12,9 @@ export const UserType = {
 
 export const auth = betterAuth({
 	database: prismaAdapter(prismaClient, {
-		provider: "postgresql", // or "mysql", "postgresql", ...etc
+		provider: "postgresql",
 	}),
-	trustedOrigins: [envParsed.CORS_ORIGIN], // Add your frontend URL here
+	trustedOrigins: [envParsed.CORS_ORIGIN],
 	emailAndPassword: {
 		enabled: true,
 		disableSignUp: false,

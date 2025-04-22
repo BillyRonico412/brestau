@@ -75,7 +75,7 @@ function IndexComponent() {
 	return (
 		<div className="flex h-dvh w-dvw">
 			<div className="mx-auto my-auto flex w-full max-w-sm flex-col items-center justify-center gap-y-8">
-				<h1 className={cn("font-bold font-display text-4xl")}>🍔 BResto 🍸</h1>
+				<h1 className={cn("font-bold font-display text-4xl")}>🍔 BRestau 🍸</h1>
 				<Form {...form}>
 					<form
 						onSubmit={(e) => {
