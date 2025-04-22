@@ -4,7 +4,6 @@
   "private": true,
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
-    "@types/bun": "latest",
     "typescript": "5.8.3"
   },
   "dependencies": {

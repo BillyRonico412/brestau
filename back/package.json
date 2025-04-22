@@ -18,7 +18,6 @@
     "zod-prisma-types": "^3.2.4"
   },
   "devDependencies": {
-    "@types/bun": "latest",
     "prisma": "^6.6.0"
   },
   "main": "src/export.ts"

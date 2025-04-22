@@ -1,4 +1,3 @@
-import { AdminMain } from "@/components/admin/AdminMainLayout"
 import { AdminSidebar } from "@/components/admin/AdminSidebar"
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar"
 import { ThemeProvider } from "@/components/utils/theme-provider"
