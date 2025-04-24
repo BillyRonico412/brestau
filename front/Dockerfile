@@ -6,7 +6,7 @@ WORKDIR /app/
 RUN npm run build
 
 FROM node:22-alpine3.21
-WORKDIR /app/front
+WORKDIR /app/
 RUN npm install -g serve
 COPY --from=build /app/front/dist ./dist
 EXPOSE 3000
