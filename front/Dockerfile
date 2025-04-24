@@ -2,6 +2,8 @@ FROM node:22-alpine3.21 as builder
 WORKDIR /app
 COPY .. /app
 RUN npm install
+WORKDIR /app/back
+RUN npx prisma generate
 WORKDIR /app/front
 RUN npm run build
 
