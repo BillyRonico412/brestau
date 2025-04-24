@@ -1,15 +1,13 @@
-FROM node:22-alpine3.21 as builder
+FROM node:22-alpine3.21 AS build
 WORKDIR /app
-COPY .. /app
+COPY . .
 RUN npm install
-WORKDIR /app/back
-RUN npx prisma generate
-WORKDIR /app/front
+WORKDIR /app/
 RUN npm run build
 
 FROM node:22-alpine3.21
 WORKDIR /app/front
 RUN npm install -g serve
-COPY --from=builder /app/dist ./dist
+COPY --from=build /app/front/dist ./dist
 EXPOSE 3000
 CMD ["serve", "-s", "dist", "-l", "3000"]
