@@ -16,6 +16,14 @@ export const Route = createFileRoute("/admin")({
 				},
 			})
 		}
+		if (
+			ctx.location.pathname === "/admin" ||
+			ctx.location.pathname === "/admin/"
+		) {
+			throw redirect({
+				to: "/admin/foods",
+			})
+		}
 	},
 })
 

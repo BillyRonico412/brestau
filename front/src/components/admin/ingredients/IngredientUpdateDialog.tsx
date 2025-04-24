@@ -21,7 +21,7 @@ import { Input } from "@/components/ui/input"
 import { Switch } from "@/components/ui/switch"
 import { type Outputs, trpc } from "@/lib/trpc"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useMutation } from "@tanstack/react-query"
+import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { EditIcon, XCircleIcon } from "lucide-react"
 import { useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -42,7 +42,7 @@ export const IngredientUpdateDialog = (props: {
 			noLactose: props.ingredient.noLactose,
 		},
 	})
-
+	const queryClient = useQueryClient()
 	useEffect(() => {
 		form.reset({
 			title: props.ingredient.title,
@@ -60,6 +60,9 @@ export const IngredientUpdateDialog = (props: {
 			async onSuccess() {
 				toast.success("Ingrédient mis à jour avec succès.")
 				form.reset()
+				await queryClient.invalidateQueries({
+					queryKey: trpc.ingredient.getAll.queryKey(),
+				})
 				setOpen(false)
 			},
 			onError() {
@@ -184,7 +187,14 @@ export const IngredientUpdateDialog = (props: {
 						Annuler
 					</Button>
 					<Button
-						onClick={() => formRef.current?.dispatchEvent(new Event("submit"))}
+						onClick={() =>
+							formRef.current?.dispatchEvent(
+								new Event("submit", {
+									bubbles: true,
+									cancelable: true,
+								}),
+							)
+						}
 					>
 						<EditIcon />
 						Modifier
