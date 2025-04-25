@@ -16,7 +16,5 @@ export const foodFormSchema = z.object({
 		.number()
 		.int("Le temps estimé doit être un entier.")
 		.positive("Le temps estimé doit être un nombre positif."),
-	ingredientIds: z
-		.array(z.string())
-		.nonempty("Au moins un ingrédient est requis."),
+	ingredientIds: z.array(z.string()),
 })

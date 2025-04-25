@@ -1,6 +1,7 @@
 import { deleteImageOnMinio, uploadFileOnMinio } from "@back/utils/file"
 import { prismaClient } from "@back/utils/prisma"
-import { adminProcedure, router } from "@back/utils/trpc"
+import { adminProcedure, publicProcedure, router } from "@back/utils/trpc"
+import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { zfd } from "zod-form-data"
 
@@ -101,5 +102,64 @@ export const foodRouter = router({
 				fileName: opts.input.id,
 				directory: "food",
 			})
+		}),
+	getBySubCategoryId: publicProcedure
+		.input(
+			z.object({
+				subCategoryId: z.string().nullish(),
+			}),
+		)
+		.query(async (opts) => {
+			if (!opts.input.subCategoryId) {
+				throw new TRPCError({
+					code: "BAD_REQUEST",
+					message: "SubCategoryId is required",
+				})
+			}
+			const subCategoryWithFoods = await prismaClient.subCategory.findUnique({
+				where: {
+					id: opts.input.subCategoryId,
+				},
+				include: {
+					foods: true,
+				},
+			})
+			if (!subCategoryWithFoods) {
+				throw new TRPCError({
+					code: "NOT_FOUND",
+					message: "SubCategory not found",
+				})
+			}
+			return subCategoryWithFoods
+		}),
+	getById: publicProcedure
+		.input(
+			z.object({
+				id: z.string().nullish(),
+			}),
+		)
+		.query(async (opts) => {
+			if (!opts.input.id) {
+				throw new TRPCError({
+					code: "BAD_REQUEST",
+					message: "FoodId is required",
+				})
+			}
+			const food = await prismaClient.food.findUnique({
+				where: {
+					id: opts.input.id,
+				},
+				include: {
+					subCategory: true,
+					ingredients: true,
+				},
+			})
+			if (!food) {
+				throw new TRPCError({
+					code: "NOT_FOUND",
+					message: "Food not found",
+				})
+			}
+			return food
 		}),
 })

@@ -6,15 +6,33 @@ export type Mode = "ON_SITE" | "TO_GO"
 
 interface Context {
 	mode: Mode | undefined
+	currentCategoryId: string | undefined
+	currentSubCategoryId: string | undefined
+	currentFoodId: string | undefined
 }
 
 type Event =
+	| {
+			type: "BACK"
+	  }
 	| {
 			type: "START_ORDER"
 	  }
 	| {
 			type: "SELECT_MODE"
 			mode: Mode
+	  }
+	| {
+			type: "SELECT_CATEGORY"
+			categoryId: string
+	  }
+	| {
+			type: "SELECT_SUB_CATEGORY"
+			subCategoryId: string
+	  }
+	| {
+			type: "SELECT_FOOD"
+			foodId: string
 	  }
 
 const machine = setup({
@@ -25,32 +43,94 @@ const machine = setup({
 	actions: {},
 	guards: {},
 }).createMachine({
-	initial: states.welcome.value,
+	initial: states.categorySelection,
 	context: {
 		mode: undefined,
+		currentCategoryId: undefined,
+		currentSubCategoryId: undefined,
+		currentFoodId: undefined,
 	},
 	states: {
-		[states.welcome.value]: {
+		[states.welcome]: {
 			on: {
-				START_ORDER: states.modeSelection.value,
+				START_ORDER: states.modeSelection,
 			},
 		},
-		[states.modeSelection.value]: {
+		[states.modeSelection]: {
 			on: {
 				SELECT_MODE: {
-					target: states.categorySelection.value,
+					target: states.categorySelection,
 					actions: assign({
 						mode: ({ event }) => event.mode,
 					}),
 				},
 			},
 		},
-		[states.categorySelection.value]: {}, // Choix entre burgers, boissons, etc.
-		[states.itemCustomization.value]: {}, // Customisation (ex: sans oignon)
-		[states.cartReview.value]: {}, // Panier avec résumé
-		[states.payment.value]: {}, // Paiement (mock ou réel)
-		[states.confirmation.value]: {}, // Confirmation de commande
-		[states.cancelled.value]: {},
+		[states.categorySelection]: {
+			on: {
+				SELECT_CATEGORY: {
+					target: states.subCategorySelection,
+					actions: assign({
+						currentCategoryId: ({ event }) => event.categoryId,
+					}),
+				},
+				BACK: {
+					target: states.welcome,
+					actions: assign({
+						mode: undefined,
+						currentCategoryId: undefined,
+						currentSubCategoryId: undefined,
+						currentFoodId: undefined,
+					}),
+				},
+			},
+		},
+		[states.subCategorySelection]: {
+			on: {
+				SELECT_SUB_CATEGORY: {
+					target: states.foodSelection,
+					actions: assign({
+						currentSubCategoryId: ({ event }) => event.subCategoryId,
+					}),
+				},
+				BACK: {
+					target: states.categorySelection,
+					actions: assign({
+						currentSubCategoryId: undefined,
+					}),
+				},
+			},
+		},
+		[states.foodSelection]: {
+			on: {
+				SELECT_FOOD: {
+					target: states.foodSummary,
+					actions: assign({
+						currentFoodId: ({ event }) => event.foodId,
+					}),
+				},
+				BACK: {
+					target: states.subCategorySelection,
+					actions: assign({
+						currentFoodId: undefined,
+					}),
+				},
+			},
+		},
+		[states.foodSummary]: {
+			on: {
+				BACK: {
+					target: states.foodSelection,
+					actions: assign({
+						currentFoodId: undefined,
+					}),
+				},
+				START_ORDER: states.order,
+			},
+		}, // Détails du plat et customisation
+		[states.order]: {}, // Résumé de la commande
+		[states.payment]: {}, // Paiement (mock ou réel)
+		[states.confirmation]: {}, // Confirmation de commande
 	},
 })
 

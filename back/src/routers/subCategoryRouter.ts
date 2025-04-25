@@ -1,6 +1,7 @@
 import { deleteImageOnMinio, uploadFileOnMinio } from "@back/utils/file"
 import { prismaClient } from "@back/utils/prisma"
-import { adminProcedure, router } from "@back/utils/trpc"
+import { adminProcedure, publicProcedure, router } from "@back/utils/trpc"
+import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 import { zfd } from "zod-form-data"
 
@@ -84,5 +85,34 @@ export const subCategoryRouter = router({
 				fileName: opts.input.id,
 				directory: "subCategory",
 			})
+		}),
+	getByCategoryId: publicProcedure
+		.input(
+			z.object({
+				categoryId: z.string().nullish(),
+			}),
+		)
+		.query(async (opts) => {
+			if (!opts.input.categoryId) {
+				throw new TRPCError({
+					code: "BAD_REQUEST",
+					message: "Category ID is required",
+				})
+			}
+			const subCategories = await prismaClient.category.findUnique({
+				where: {
+					id: opts.input.categoryId,
+				},
+				include: {
+					subCategories: true,
+				},
+			})
+			if (!subCategories) {
+				throw new TRPCError({
+					code: "NOT_FOUND",
+					message: "Category not found",
+				})
+			}
+			return subCategories
 		}),
 })

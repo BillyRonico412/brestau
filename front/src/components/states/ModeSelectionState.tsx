@@ -7,13 +7,13 @@ export const ModeSelectionState = () => {
 	const send = useSetAtom(machineAtom)
 	return (
 		<div className="flex h-dvh w-dvw">
-			<div className="mx-auto my-auto flex flex-col items-center gap-y-4">
-				<p className="font-semibold">
+			<div className="mx-auto my-auto flex w-full max-w-7xl flex-col items-center gap-y-4 px-4 py-2">
+				<p className="font-display font-semibold text-xl">
 					Tu manges ici ou tu files avec ton festin ?
 				</p>
 				<div className="flex items-center gap-x-4">
 					<Button
-						className=" w-full"
+						className="w-full"
 						onClick={() => {
 							send({
 								type: "SELECT_MODE",
@@ -25,7 +25,7 @@ export const ModeSelectionState = () => {
 					</Button>
 					<Button
 						variant="outline"
-						className=" w-full"
+						className="w-full"
 						onClick={() => {
 							send({
 								type: "SELECT_MODE",

@@ -1,5 +1,5 @@
 import { prismaClient } from "@back/utils/prisma"
-import { router, adminProcedure } from "@back/utils/trpc"
+import { router, adminProcedure, publicProcedure } from "@back/utils/trpc"
 import { z } from "zod"
 
 export const categoryRouter = router({
@@ -16,7 +16,7 @@ export const categoryRouter = router({
 				},
 			})
 		}),
-	getAll: adminProcedure.query(async () => {
+	getAll: publicProcedure.query(async () => {
 		const categories = await prismaClient.category.findMany({
 			include: {
 				subCategories: {

@@ -1,4 +1,5 @@
 import { IngredientDeleteDialog } from "@/components/admin/ingredients/IngredientDeleteDialog"
+import { ingredientTableAtom } from "@/components/admin/ingredients/ingredientTableAtom"
 import { IngredientUpdateDialog } from "@/components/admin/ingredients/IngredientUpdateDialog"
 import { DataTable } from "@/components/common/DataTable"
 import { Badge } from "@/components/ui/badge"
@@ -7,6 +8,7 @@ import { trpc, type Outputs } from "@/lib/trpc"
 import { useSuspenseQuery } from "@tanstack/react-query"
 
 import type { ColumnDef } from "@tanstack/react-table"
+import { useSetAtom } from "jotai"
 import { ArrowUpDownIcon } from "lucide-react"
 
 type Ingredient = Outputs["ingredient"]["getAll"][number]
@@ -138,6 +140,8 @@ const columns: ColumnDef<Ingredient>[] = [
 
 export const IngredientTable = () => {
 	const getAllQuery = useSuspenseQuery(trpc.ingredient.getAll.queryOptions())
-
-	return <DataTable columns={columns} data={getAllQuery.data} />
+	const setTable = useSetAtom(ingredientTableAtom)
+	return (
+		<DataTable columns={columns} data={getAllQuery.data} setTable={setTable} />
+	)
 }

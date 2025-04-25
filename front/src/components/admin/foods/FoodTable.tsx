@@ -1,14 +1,16 @@
 import { FoodDeleteDialog } from "@/components/admin/foods/FoodDeleteDialog"
+import {
+	foodTableAtom,
+	type Food,
+} from "@/components/admin/foods/foodTableAtom"
 import { FoodUpdateDialog } from "@/components/admin/foods/FoodUpdateDialog"
 import { DataTable } from "@/components/common/DataTable"
-import { trpc, type Outputs } from "@/lib/trpc"
-import { useSuspenseQuery } from "@tanstack/react-query"
 import { Button } from "@/components/ui/button"
-import { ArrowUpDownIcon } from "lucide-react"
-
+import { trpc } from "@/lib/trpc"
+import { useSuspenseQuery } from "@tanstack/react-query"
 import type { ColumnDef } from "@tanstack/react-table"
-
-type Food = Outputs["food"]["getAll"][number]
+import { useSetAtom } from "jotai"
+import { ArrowUpDownIcon } from "lucide-react"
 
 const columns: ColumnDef<Food>[] = [
 	{
@@ -83,5 +85,8 @@ const columns: ColumnDef<Food>[] = [
 
 export const FoodTable = () => {
 	const getAllQuery = useSuspenseQuery(trpc.food.getAll.queryOptions())
-	return <DataTable columns={columns} data={getAllQuery.data} />
+	const setTable = useSetAtom(foodTableAtom)
+	return (
+		<DataTable columns={columns} data={getAllQuery.data} setTable={setTable} />
+	)
 }

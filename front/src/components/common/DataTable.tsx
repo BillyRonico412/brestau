@@ -17,12 +17,15 @@ import {
 	type ColumnFiltersState,
 	getFilteredRowModel,
 } from "@tanstack/react-table"
-import { useState } from "react"
+import { type Dispatch, type SetStateAction, useEffect, useState } from "react"
 
 interface DataTableProps<TData, TValue> {
 	columns: ColumnDef<TData, TValue>[]
 	data: TData[]
+	setTable?: Dispatch<SetStateAction<ReactTable<TData> | undefined>>
 }
+
+export type ReactTable<TData> = ReturnType<typeof useReactTable<TData>>
 
 export const DataTable = <TData, TValue>(
 	props: DataTableProps<TData, TValue>,
@@ -42,6 +45,12 @@ export const DataTable = <TData, TValue>(
 			columnFilters,
 		},
 	})
+
+	useEffect(() => {
+		if (props.setTable) {
+			props.setTable(table)
+		}
+	}, [props.setTable, table])
 
 	return (
 		<div className="rounded-md border">
