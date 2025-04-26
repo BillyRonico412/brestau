@@ -5,26 +5,13 @@ import { ConfirmationState } from "@/components/states/ConfirmationState"
 import { FoodSelectionState } from "@/components/states/FoodSelectionState"
 import { FoodSummaryState } from "@/components/states/FoodSummaryState"
 import { ModeSelectionState } from "@/components/states/ModeSelectionState"
-import { PaymentState } from "@/components/states/PaymentState"
+import { OrderingState } from "@/components/states/OrderingState"
 import { SubCategorySelectionState } from "@/components/states/SubCategorySelectionState"
 import { WelcomeState } from "@/components/states/WelcomeState"
 import { machineAtom } from "@/lib/machine/machine"
-import type { State } from "@/lib/machine/states"
 import { createFileRoute } from "@tanstack/react-router"
 import { useAtomValue } from "jotai"
-import type { ReactNode } from "react"
-
-const stateComponents: Record<State, ReactNode> = {
-	welcome: <WelcomeState />,
-	modeSelection: <ModeSelectionState />,
-	categorySelection: <CategorySelectionState />,
-	subCategorySelection: <SubCategorySelectionState />,
-	foodSelection: <FoodSelectionState />,
-	foodSummary: <FoodSummaryState />,
-	order: <div>OrderState</div>,
-	payment: <PaymentState />,
-	confirmation: <ConfirmationState />,
-}
+import { match } from "ts-pattern"
 
 export const Route = createFileRoute("/")({
 	component: IndexComponent,
@@ -35,7 +22,26 @@ function IndexComponent() {
 	return (
 		<div className="h-dvh w-dvw overflow-hidden">
 			<QueryErrorBoundary>
-				<QuerySuspense>{stateComponents[state.value]}</QuerySuspense>
+				<QuerySuspense>
+					{match(state)
+						.with({ value: "welcome" }, () => <WelcomeState />)
+						.with({ value: "modeSelection" }, () => <ModeSelectionState />)
+						.with({ value: { selection: "categorySelection" } }, () => (
+							<CategorySelectionState />
+						))
+						.with({ value: { selection: "subCategorySelection" } }, () => (
+							<SubCategorySelectionState />
+						))
+						.with({ value: { selection: "foodSelection" } }, () => (
+							<FoodSelectionState />
+						))
+						.with({ value: { selection: "foodSummary" } }, () => (
+							<FoodSummaryState />
+						))
+						.with({ value: "ordering" }, () => <OrderingState />)
+						.with({ value: "confirmation" }, () => <ConfirmationState />)
+						.exhaustive()}
+				</QuerySuspense>
 			</QueryErrorBoundary>
 		</div>
 	)

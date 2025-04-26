@@ -162,4 +162,20 @@ export const foodRouter = router({
 			}
 			return food
 		}),
+	getByIds: publicProcedure
+		.input(
+			z.object({
+				ids: z.array(z.string()),
+			}),
+		)
+		.query(async (opts) => {
+			const foods = await prismaClient.food.findMany({
+				where: {
+					id: {
+						in: opts.input.ids,
+					},
+				},
+			})
+			return foods
+		}),
 })
