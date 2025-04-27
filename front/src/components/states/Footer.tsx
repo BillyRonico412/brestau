@@ -30,9 +30,13 @@ export const Footer = () => {
 		),
 	)
 	const visibleBackButton =
-		state.value !== "welcome" && state.value !== "modeSelection"
+		!state.matches("welcome") &&
+		!state.matches("modeSelection") &&
+		!state.matches({
+			selection: "categorySelection",
+		})
 	const visibleCartButton =
-		state.value !== "welcome" && state.value !== "modeSelection"
+		!state.matches("welcome") && !state.matches("modeSelection")
 	return (
 		<div className="space-x-4">
 			{visibleBackButton && (

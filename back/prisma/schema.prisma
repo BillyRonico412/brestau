@@ -59,6 +59,7 @@ model Ingredient {
 
 model Order {
   id              String      @id @default(cuid())
+  counter         Int         @default(autoincrement())
   items           OrderItem[]
   stripeSessionId String
   createdAt       DateTime    @default(now())

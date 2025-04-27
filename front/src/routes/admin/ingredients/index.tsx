@@ -39,7 +39,7 @@ function RouteComponent() {
 			<AdminBody className="flex flex-col gap-4">
 				{ingredientTable && (
 					<Input
-						placeholder="Filter emails..."
+						placeholder="Rechercher..."
 						value={inputValue}
 						onChange={(event) => setInputValue(event.target.value)}
 						className="max-w-sm"

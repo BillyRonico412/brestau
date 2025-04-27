@@ -4,24 +4,31 @@ import Stripe from "stripe"
 
 export const stripe = new Stripe(envParsed.STRIPE_SECRET_KEY)
 
-export const createStripeSessionByOrder = async (orderId: string) => {
-	const order = await prismaClient.order.findUnique({
-		where: { id: orderId },
-		include: {
-			items: {
-				include: {
-					food: true,
-				},
+export const createStripeSessionByOrder = async (params: {
+	orderId: string
+	foodIdAndQuantityList: {
+		foodId: string
+		quantity: number
+	}[]
+}) => {
+	let total = 0
+	const foodPrices = await prismaClient.food.findMany({
+		where: {
+			id: {
+				in: params.foodIdAndQuantityList.map((food) => food.foodId),
 			},
 		},
+		select: {
+			id: true,
+			price: true,
+		},
 	})
-	if (!order) {
-		throw new Error("Order not found")
-	}
-	let total = 0
-	for (const orderItem of order.items) {
-		const quantity = orderItem.quantity
-		total += orderItem.food.price * quantity
+	const foodPricesById = Object.fromEntries(
+		foodPrices.map((food) => [food.id, food.price]),
+	)
+	for (const foodIdAndQuantity of params.foodIdAndQuantityList) {
+		const quantity = foodIdAndQuantity.quantity
+		total += foodPricesById[foodIdAndQuantity.foodId] * quantity
 	}
 	const session = await stripe.checkout.sessions.create({
 		line_items: [
@@ -31,7 +38,7 @@ export const createStripeSessionByOrder = async (orderId: string) => {
 					product_data: {
 						name: "Panier de commande Brestau",
 						metadata: {
-							orderId: order.id,
+							orderId: params.orderId,
 						},
 					},
 					unit_amount: Math.round(total * 100),
@@ -40,7 +47,7 @@ export const createStripeSessionByOrder = async (orderId: string) => {
 			},
 		],
 		mode: "payment",
-		success_url: `${envParsed.CORS_ORIGIN}/payment/success?orderId=${order.id}`,
+		success_url: `${envParsed.CORS_ORIGIN}/payment/success?orderId=${params.orderId}`,
 		cancel_url: `${envParsed.CORS_ORIGIN}/payment/cancel`,
 	})
 	return {

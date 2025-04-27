@@ -1,6 +1,7 @@
 import { prismaClient } from "@back/utils/prisma"
-import { createStripeSessionByOrder } from "@back/utils/stripe"
+import { createStripeSessionByOrder, stripe } from "@back/utils/stripe"
 import { publicProcedure, router } from "@back/utils/trpc"
+import { TRPCError } from "@trpc/server"
 import { z } from "zod"
 
 export const orderRouter = router({
@@ -15,7 +16,10 @@ export const orderRouter = router({
 		)
 		.mutation(async (opts) => {
 			const orderId = crypto.randomUUID()
-			const session = await createStripeSessionByOrder(orderId)
+			const session = await createStripeSessionByOrder({
+				orderId,
+				foodIdAndQuantityList: opts.input,
+			})
 			await prismaClient.order.create({
 				data: {
 					id: orderId,
@@ -48,12 +52,29 @@ export const orderRouter = router({
 				},
 			})
 			if (!order) {
-				throw new Error("Order not found")
+				throw new TRPCError({
+					code: "NOT_FOUND",
+					message: "Order not found",
+				})
 			}
-			return order.items.map((item) => ({
-				foodId: item.foodId,
-				quantity: item.quantity,
-				food: item.food,
-			}))
+			const session = await stripe.checkout.sessions.retrieve(
+				order.stripeSessionId,
+				{
+					expand: ["payment_intent"],
+				},
+			)
+			if (!session) {
+				throw new TRPCError({
+					code: "NOT_FOUND",
+					message: "Session not found",
+				})
+			}
+			if (session.status !== "complete") {
+				throw new TRPCError({
+					code: "BAD_REQUEST",
+					message: "Payment not succeeded",
+				})
+			}
+			return order
 		}),
 })
