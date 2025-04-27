@@ -1,7 +1,7 @@
 import { z } from "zod"
-import * as dotenv from "dotenv"
+import { config } from "dotenv"
 
-dotenv.config()
+config()
 
 export const envParsed = z
 	.object({
@@ -14,6 +14,7 @@ export const envParsed = z
 		MINIO_ACCESS_KEY: z.string(),
 		MINIO_SECRET_KEY: z.string(),
 		MINIO_BUCKET: z.string(),
+		STRIPE_SECRET_KEY: z.string(),
 	})
 	// biome-ignore lint/nursery/noProcessEnv: <explanation>
 	.parse(process.env)

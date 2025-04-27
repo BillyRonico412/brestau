@@ -44,6 +44,7 @@ model Food {
   price           Float
   ingredients     Ingredient[]
   estimatedTimeMn Int
+  OrderItem       OrderItem[]
 }
 
 model Ingredient {
@@ -54,6 +55,23 @@ model Ingredient {
   halal      Boolean
   noGluten   Boolean
   noLactose  Boolean
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  items           OrderItem[]
+  stripeSessionId String
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+model OrderItem {
+  id       String @id @default(cuid())
+  orderId  String
+  order    Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  foodId   String
+  food     Food   @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  quantity Int
 }
 
 model User {

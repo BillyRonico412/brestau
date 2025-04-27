@@ -8,10 +8,7 @@ interface Context {
 	currentCategoryId: string | undefined
 	currentSubCategoryId: string | undefined
 	currentFoodId: string | undefined
-	cart: {
-		foodId: string
-		quantity: number
-	}[]
+	cart: Record<string, number>
 }
 
 type Event =
@@ -60,7 +57,7 @@ const machine = setup({
 		currentCategoryId: undefined,
 		currentSubCategoryId: undefined,
 		currentFoodId: undefined,
-		cart: [],
+		cart: {},
 	},
 	states: {
 		welcome: {
@@ -138,10 +135,12 @@ const machine = setup({
 									if (!context.currentFoodId) {
 										throw new Error("No food selected")
 									}
-									return [
+									return {
 										...context.cart,
-										{ foodId: context.currentFoodId, quantity: event.quantity },
-									]
+										[context.currentFoodId]:
+											(context.cart[context.currentFoodId] ?? 0) +
+											event.quantity,
+									}
 								},
 							}),
 						},
@@ -155,8 +154,11 @@ const machine = setup({
 				},
 			},
 		},
-		ordering: {},
-		confirmation: {},
+		ordering: {
+			on: {
+				BACK: "selection.hist",
+			},
+		},
 	},
 })
 export type States = StateFrom<typeof machine>["value"]

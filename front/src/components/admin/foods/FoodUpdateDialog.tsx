@@ -64,6 +64,20 @@ export const FoodUpdateDialog = (props: {
 		},
 	})
 
+	useEffect(() => {
+		if (open) {
+			form.reset({
+				title: props.food.title,
+				description: props.food.description,
+				image: undefined,
+				price: props.food.price,
+				subCategoryId: props.food.subCategoryId,
+				estimatedTimeMn: props.food.estimatedTimeMn,
+				ingredientIds: props.food.ingredients.map((i) => i.id),
+			})
+		}
+	}, [open, props.food, form.reset])
+
 	const formRef = useRef<HTMLFormElement>(null)
 
 	const subCategoriesQuery = useSuspenseQuery(

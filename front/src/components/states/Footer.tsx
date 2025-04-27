@@ -5,25 +5,23 @@ import { toCurrency } from "@/lib/utils"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { useAtom } from "jotai"
 import { ChevronLeftCircleIcon, ShoppingCartIcon } from "lucide-react"
-import { objectify } from "radash"
 
 export const Footer = () => {
 	const [state, send] = useAtom(machineAtom)
-	const quantityByFoodId = objectify(
-		state.context.cart,
-		(food) => food.foodId,
-		(food) => food.quantity,
-	)
 	const foodByIdsQuery = useSuspenseQuery(
 		trpc.food.getByIds.queryOptions(
 			{
-				ids: state.context.cart.map((food) => food.foodId),
+				ids: Object.keys(state.context.cart),
 			},
 			{
 				select(data) {
 					let total = 0
-					for (const food of data) {
-						const quantity = quantityByFoodId[food.id] ?? 0
+					for (const [id, quantity] of Object.entries(state.context.cart)) {
+						const food = data.find((food) => food.id === id)
+						if (!food) {
+							continue
+						}
+
 						total += food.price * quantity
 					}
 					return total
@@ -34,9 +32,7 @@ export const Footer = () => {
 	const visibleBackButton =
 		state.value !== "welcome" && state.value !== "modeSelection"
 	const visibleCartButton =
-		state.value !== "welcome" &&
-		state.value !== "modeSelection" &&
-		state.value !== "confirmation"
+		state.value !== "welcome" && state.value !== "modeSelection"
 	return (
 		<div className="space-x-4">
 			{visibleBackButton && (

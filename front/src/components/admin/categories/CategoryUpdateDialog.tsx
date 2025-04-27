@@ -22,7 +22,7 @@ import { type Outputs, trpc } from "@/lib/trpc"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useMutation, useQueryClient } from "@tanstack/react-query"
 import { EditIcon, XCircleIcon } from "lucide-react"
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import type { z } from "zod"
@@ -38,6 +38,12 @@ export const CategoryUpdateDialog = (props: {
 			title: props.category.title,
 		},
 	})
+
+	useEffect(() => {
+		if (open) {
+			form.reset({ title: props.category.title })
+		}
+	}, [open, props.category.title, form.reset])
 
 	const formRef = useRef<HTMLFormElement>(null)
 

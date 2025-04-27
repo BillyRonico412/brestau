@@ -29,5 +29,6 @@
 		}
 	},
 	"include": ["src"],
+	"exclude": ["../back/src/generated/prisma/client.ts"],
 	"references": [{ "path": "./tsconfig.node.json" }]
 }

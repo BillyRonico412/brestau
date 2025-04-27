@@ -42,6 +42,19 @@ export const IngredientUpdateDialog = (props: {
 			noLactose: props.ingredient.noLactose,
 		},
 	})
+
+	useEffect(() => {
+		if (open) {
+			form.reset({
+				title: props.ingredient.title,
+				vegetarian: props.ingredient.vegetarian,
+				halal: props.ingredient.halal,
+				noGluten: props.ingredient.noGluten,
+				noLactose: props.ingredient.noLactose,
+			})
+		}
+	}, [open, props.ingredient, form.reset])
+
 	const queryClient = useQueryClient()
 	useEffect(() => {
 		form.reset({

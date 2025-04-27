@@ -56,6 +56,16 @@ export const SubCategoryUpdateDialog = (props: {
 		},
 	})
 
+	useEffect(() => {
+		if (open) {
+			form.reset({
+				title: props.subCategory.title,
+				image: undefined,
+				categoryId: props.subCategory.categoryId,
+			})
+		}
+	}, [open, props.subCategory, form.reset])
+
 	const formRef = useRef<HTMLFormElement>(null)
 
 	const categoriesQuery = useSuspenseQuery(trpc.category.getAll.queryOptions())

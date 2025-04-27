@@ -9,10 +9,10 @@ import { Card, CardContent, CardFooter } from "@/components/ui/card"
 import { machineAtom } from "@/lib/machine/machine"
 import { type Outputs, trpc } from "@/lib/trpc"
 import { toCurrency } from "@/lib/utils"
-import { useSuspenseQuery } from "@tanstack/react-query"
+import { useMutation, useSuspenseQuery } from "@tanstack/react-query"
 import { useAtom } from "jotai"
-import { CreditCard, CreditCardIcon } from "lucide-react"
-import { objectify } from "radash"
+import { ChevronLeftCircleIcon, CreditCardIcon } from "lucide-react"
+import { toast } from "sonner"
 
 const FoodCard = (props: {
 	food: Outputs["food"]["getByIds"][number]
@@ -40,20 +40,15 @@ const FoodCard = (props: {
 
 export const OrderingState = () => {
 	const [state, send] = useAtom(machineAtom)
-	const quantityByFoodId = objectify(
-		state.context.cart,
-		(food) => food.foodId,
-		(food) => food.quantity,
-	)
 	const foodByIdsQuery = useSuspenseQuery(
 		trpc.food.getByIds.queryOptions(
 			{
-				ids: state.context.cart.map((food) => food.foodId),
+				ids: Object.keys(state.context.cart),
 			},
 			{
 				select(data) {
 					return data.map((food) => {
-						const quantity = quantityByFoodId[food.id] ?? 0
+						const quantity = state.context.cart[food.id] ?? 0
 						return {
 							food,
 							quantity,
@@ -63,6 +58,18 @@ export const OrderingState = () => {
 				},
 			},
 		),
+	)
+	const orderMutation = useMutation(
+		trpc.order.createOrder.mutationOptions({
+			onSuccess() {
+				toast.success("Vous allez être redirigé vers la page de paiement")
+			},
+			onError() {
+				toast.error(
+					"Une erreur est survenue lors de la création de la commande",
+				)
+			},
+		}),
 	)
 	return (
 		<SelectionLayout>
@@ -87,8 +94,34 @@ export const OrderingState = () => {
 					/>
 				)}
 			</SelectionBody>
-			<div>
-				<Button size="lg">
+			<div className="flex items-center justify-center gap-4">
+				<Button
+					variant="outline"
+					onClick={() => {
+						send({ type: "BACK" })
+					}}
+				>
+					<ChevronLeftCircleIcon />
+					Retour
+				</Button>
+				<Button
+					size="lg"
+					onClick={async () => {
+						if (state.context.cart.length === 0) {
+							return
+						}
+						const url = await orderMutation.mutateAsync(
+							Object.entries(state.context.cart).map(([foodId, quantity]) => ({
+								foodId,
+								quantity,
+							})),
+						)
+						if (!url) {
+							return
+						}
+						window.location.href = url
+					}}
+				>
 					<CreditCardIcon />
 					Payer (
 					{toCurrency(

@@ -1,7 +1,6 @@
 import { QueryErrorBoundary } from "@/components/common/QueryErrorBoundary"
 import { QuerySuspense } from "@/components/common/QuerySuspense"
 import { CategorySelectionState } from "@/components/states/CategorySelectionState"
-import { ConfirmationState } from "@/components/states/ConfirmationState"
 import { FoodSelectionState } from "@/components/states/FoodSelectionState"
 import { FoodSummaryState } from "@/components/states/FoodSummaryState"
 import { ModeSelectionState } from "@/components/states/ModeSelectionState"
@@ -39,7 +38,6 @@ function IndexComponent() {
 							<FoodSummaryState />
 						))
 						.with({ value: "ordering" }, () => <OrderingState />)
-						.with({ value: "confirmation" }, () => <ConfirmationState />)
 						.exhaustive()}
 				</QuerySuspense>
 			</QueryErrorBoundary>

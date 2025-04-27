@@ -14,6 +14,8 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as AdminRouteImport } from './routes/admin/route'
 import { Route as IndexImport } from './routes/index'
 import { Route as LoginIndexImport } from './routes/login/index'
+import { Route as PaymentSuccessImport } from './routes/payment/success'
+import { Route as PaymentCancelImport } from './routes/payment/cancel'
 import { Route as AdminSubcategoriesIndexImport } from './routes/admin/subcategories/index'
 import { Route as AdminIngredientsIndexImport } from './routes/admin/ingredients/index'
 import { Route as AdminFoodsIndexImport } from './routes/admin/foods/index'
@@ -36,6 +38,18 @@ const IndexRoute = IndexImport.update({
 const LoginIndexRoute = LoginIndexImport.update({
   id: '/login/',
   path: '/login/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PaymentSuccessRoute = PaymentSuccessImport.update({
+  id: '/payment/success',
+  path: '/payment/success',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const PaymentCancelRoute = PaymentCancelImport.update({
+  id: '/payment/cancel',
+  path: '/payment/cancel',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -79,6 +93,20 @@ declare module '@tanstack/react-router' {
       path: '/admin'
       fullPath: '/admin'
       preLoaderRoute: typeof AdminRouteImport
+      parentRoute: typeof rootRoute
+    }
+    '/payment/cancel': {
+      id: '/payment/cancel'
+      path: '/payment/cancel'
+      fullPath: '/payment/cancel'
+      preLoaderRoute: typeof PaymentCancelImport
+      parentRoute: typeof rootRoute
+    }
+    '/payment/success': {
+      id: '/payment/success'
+      path: '/payment/success'
+      fullPath: '/payment/success'
+      preLoaderRoute: typeof PaymentSuccessImport
       parentRoute: typeof rootRoute
     }
     '/login/': {
@@ -142,6 +170,8 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/payment/cancel': typeof PaymentCancelRoute
+  '/payment/success': typeof PaymentSuccessRoute
   '/login': typeof LoginIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/foods': typeof AdminFoodsIndexRoute
@@ -152,6 +182,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/payment/cancel': typeof PaymentCancelRoute
+  '/payment/success': typeof PaymentSuccessRoute
   '/login': typeof LoginIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/foods': typeof AdminFoodsIndexRoute
@@ -163,6 +195,8 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/payment/cancel': typeof PaymentCancelRoute
+  '/payment/success': typeof PaymentSuccessRoute
   '/login/': typeof LoginIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/foods/': typeof AdminFoodsIndexRoute
@@ -175,6 +209,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/payment/cancel'
+    | '/payment/success'
     | '/login'
     | '/admin/categories'
     | '/admin/foods'
@@ -184,6 +220,8 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
+    | '/payment/cancel'
+    | '/payment/success'
     | '/login'
     | '/admin/categories'
     | '/admin/foods'
@@ -193,6 +231,8 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/payment/cancel'
+    | '/payment/success'
     | '/login/'
     | '/admin/categories/'
     | '/admin/foods/'
@@ -204,12 +244,16 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  PaymentCancelRoute: typeof PaymentCancelRoute
+  PaymentSuccessRoute: typeof PaymentSuccessRoute
   LoginIndexRoute: typeof LoginIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
+  PaymentCancelRoute: PaymentCancelRoute,
+  PaymentSuccessRoute: PaymentSuccessRoute,
   LoginIndexRoute: LoginIndexRoute,
 }
 
@@ -225,6 +269,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/admin",
+        "/payment/cancel",
+        "/payment/success",
         "/login/"
       ]
     },
@@ -239,6 +285,12 @@ export const routeTree = rootRoute
         "/admin/ingredients/",
         "/admin/subcategories/"
       ]
+    },
+    "/payment/cancel": {
+      "filePath": "payment/cancel.tsx"
+    },
+    "/payment/success": {
+      "filePath": "payment/success.tsx"
     },
     "/login/": {
       "filePath": "login/index.tsx"
