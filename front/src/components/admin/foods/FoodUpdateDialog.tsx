@@ -149,6 +149,9 @@ export const FoodUpdateDialog = (props: {
 		formData.append("price", data.price.toString())
 		formData.append("subCategoryId", data.subCategoryId)
 		formData.append("estimatedTimeMn", data.estimatedTimeMn.toString())
+		for (const ingredientId of data.ingredientIds) {
+			formData.append("ingredientIds", ingredientId)
+		}
 		updateFoodMutation.mutate(formData)
 	}
 
