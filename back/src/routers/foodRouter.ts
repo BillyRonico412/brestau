@@ -175,6 +175,9 @@ export const foodRouter = router({
 						in: opts.input.ids,
 					},
 				},
+				include: {
+					ingredients: true,
+				},
 			})
 			return foods
 		}),

@@ -9,21 +9,81 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { machineAtom } from "@/lib/machine/machine"
-import { trpc } from "@/lib/trpc"
+import { type Outputs, trpc } from "@/lib/trpc"
 import { toCurrency } from "@/lib/utils"
 import { useSuspenseQuery } from "@tanstack/react-query"
 import { useAtom } from "jotai"
-import { ShoppingBasketIcon } from "lucide-react"
-import { useState } from "react"
+import { CheckIcon, ShoppingBasketIcon, XIcon } from "lucide-react"
+
+const Ingredient = (props: {
+	ingredient: Outputs["food"]["getById"]["ingredients"][number]
+}) => {
+	const [state, send] = useAtom(machineAtom)
+	if (!state.context.currentOrderItem) {
+		return null
+	}
+	const isRemoved = state.context.currentOrderItem.removedIngredientIds.some(
+		(ingredientId) => ingredientId === props.ingredient.id,
+	)
+	const onClick = () => {
+		if (!state.context.currentOrderItem) {
+			throw new Error("No current order item")
+		}
+		let removedIngredientIds = [
+			...state.context.currentOrderItem.removedIngredientIds,
+		]
+		if (!isRemoved) {
+			removedIngredientIds.push(props.ingredient.id)
+		} else {
+			removedIngredientIds = removedIngredientIds.filter(
+				(ingredientId) => ingredientId !== props.ingredient.id,
+			)
+		}
+		send({
+			type: "UPDATE_CURRENT_ORDER_ITEM",
+			removedIngredientIds,
+		})
+	}
+	return (
+		<Badge
+			variant={isRemoved ? "outline" : "default"}
+			className="relative"
+			key={props.ingredient.id}
+		>
+			{props.ingredient.title}
+			<Button
+				className="-translate-y-1/2 absolute top-0 right-0 flex h-4 w-4 translate-x-1/2 items-center justify-center rounded-full p-0"
+				variant={!isRemoved ? "destructive" : "default"}
+				onClick={(e) => {
+					e.stopPropagation()
+					onClick()
+				}}
+			>
+				{isRemoved ? (
+					<CheckIcon className="!size-3" />
+				) : (
+					<XIcon className="!size-3" />
+				)}
+			</Button>
+		</Badge>
+	)
+}
 
 export const FoodSummaryState = () => {
 	const [state, send] = useAtom(machineAtom)
 	const foodQuery = useSuspenseQuery(
-		trpc.food.getById.queryOptions({
-			id: state.context.currentFoodId,
-		}),
+		trpc.food.getById.queryOptions(
+			{
+				id: state.context.currentOrderItem?.foodId,
+			},
+			{
+				enabled: !!state.context.currentOrderItem?.foodId,
+			},
+		),
 	)
-	const [nb, setNb] = useState(1)
+	if (!state.context.currentOrderItem) {
+		throw new Error("No food selected")
+	}
 	return (
 		<SelectionLayout>
 			<SelectionHeader>{foodQuery.data.title}</SelectionHeader>
@@ -43,9 +103,7 @@ export const FoodSummaryState = () => {
 								<p className="font-medium text-sm">Ingrédients</p>
 								<div className="flex flex-1 flex-wrap items-center gap-4">
 									{foodQuery.data.ingredients.map((ingredient) => (
-										<Badge variant="outline" key={ingredient.id}>
-											{ingredient.title}
-										</Badge>
+										<Ingredient key={ingredient.id} ingredient={ingredient} />
 									))}
 								</div>
 							</div>
@@ -90,14 +148,23 @@ export const FoodSummaryState = () => {
 			<div className="flex flex-col items-center justify-center gap-4">
 				<div className="flex items-center justify-center gap-6">
 					<p className="font-semibold text-lg">
-						{toCurrency(foodQuery.data.price * nb)}
+						{toCurrency(
+							foodQuery.data.price * state.context.currentOrderItem.quantity,
+						)}
 					</p>
-					<ButtonNumber nb={nb} setNb={setNb} />
+					<ButtonNumber
+						nb={state.context.currentOrderItem.quantity}
+						setNb={(nb) => {
+							send({
+								type: "UPDATE_CURRENT_ORDER_ITEM",
+								quantity: nb,
+							})
+						}}
+					/>
 					<Button
 						onClick={() => {
 							send({
-								type: "ADD_TO_CART",
-								quantity: nb,
+								type: "ADD_TO_ORDER",
 							})
 						}}
 					>

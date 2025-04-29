@@ -29,7 +29,7 @@ export const Route = createFileRoute("/admin")({
 
 function RouteComponent() {
 	return (
-		<ThemeProvider defaultTheme="system" storageKey="vite-ui-theme">
+		<ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
 			<SidebarProvider>
 				<AdminSidebar />
 				<main className="flex h-dvh w-full flex-col overflow-hidden">

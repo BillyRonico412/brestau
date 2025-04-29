@@ -11,18 +11,17 @@ export const Footer = () => {
 	const foodByIdsQuery = useSuspenseQuery(
 		trpc.food.getByIds.queryOptions(
 			{
-				ids: Object.keys(state.context.cart),
+				ids: state.context.order.map((item) => item.foodId),
 			},
 			{
 				select(data) {
 					let total = 0
-					for (const [id, quantity] of Object.entries(state.context.cart)) {
-						const food = data.find((food) => food.id === id)
+					for (const orderItem of state.context.order) {
+						const food = data.find((food) => food.id === orderItem.foodId)
 						if (!food) {
-							continue
+							throw new Error("Food not found")
 						}
-
-						total += food.price * quantity
+						total += food.price * orderItem.quantity
 					}
 					return total
 				},
@@ -53,7 +52,7 @@ export const Footer = () => {
 			{visibleCartButton && (
 				<Button
 					onClick={() => {
-						send({ type: "GO_TO_CART" })
+						send({ type: "GO_TO_ORDER" })
 					}}
 				>
 					<ShoppingCartIcon />

@@ -1,4 +1,5 @@
 import { Toaster } from "@/components/ui/sonner"
+import { ThemeProvider } from "@/components/utils/theme-provider"
 import { queryClient } from "@/lib/trpc"
 import { QueryClientProvider } from "@tanstack/react-query"
 import { createRootRoute, Outlet } from "@tanstack/react-router"
@@ -12,7 +13,9 @@ function Root() {
 	return (
 		<>
 			<QueryClientProvider client={queryClient}>
-				<Outlet />
+				<ThemeProvider defaultTheme="light" storageKey="vite-ui-theme">
+					<Outlet />
+				</ThemeProvider>
 			</QueryClientProvider>
 			<Toaster />
 			<TanStackRouterDevtools />

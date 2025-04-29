@@ -1,14 +1,21 @@
+import { produce } from "immer"
 import { atomWithMachine } from "jotai-xstate"
 import { assign, setup, type StateFrom } from "xstate"
 
 export type Mode = "ON_SITE" | "TO_GO"
 
-interface Context {
+export type OrderItem = {
+	foodId: string
+	quantity: number
+	removedIngredientIds: string[]
+}
+
+export interface Context {
 	mode: Mode | undefined
 	currentCategoryId: string | undefined
 	currentSubCategoryId: string | undefined
-	currentFoodId: string | undefined
-	cart: Record<string, number>
+	currentOrderItem: OrderItem | undefined
+	order: OrderItem[]
 }
 
 type Event =
@@ -35,11 +42,19 @@ type Event =
 			foodId: string
 	  }
 	| {
-			type: "ADD_TO_CART"
-			quantity: number
+			type: "ADD_TO_ORDER"
 	  }
 	| {
-			type: "GO_TO_CART"
+			type: "GO_TO_ORDER"
+	  }
+	| {
+			type: "UPDATE_CURRENT_ORDER_ITEM"
+			quantity?: number
+			removedIngredientIds?: string[]
+	  }
+	| {
+			type: "REMOVE_FROM_ORDER"
+			index: number
 	  }
 
 const machine = setup({
@@ -56,8 +71,8 @@ const machine = setup({
 		mode: undefined,
 		currentCategoryId: undefined,
 		currentSubCategoryId: undefined,
-		currentFoodId: undefined,
-		cart: {},
+		currentOrderItem: undefined,
+		order: [],
 	},
 	states: {
 		welcome: {
@@ -78,7 +93,7 @@ const machine = setup({
 		selection: {
 			initial: "categorySelection",
 			on: {
-				GO_TO_CART: "ordering",
+				GO_TO_ORDER: "ordering",
 			},
 			states: {
 				hist: {
@@ -115,39 +130,57 @@ const machine = setup({
 						SELECT_FOOD: {
 							target: "foodSummary",
 							actions: assign({
-								currentFoodId: ({ event }) => event.foodId,
+								currentOrderItem: ({ event }) => ({
+									foodId: event.foodId,
+									quantity: 1,
+									removedIngredientIds: [],
+								}),
 							}),
 						},
+
 						BACK: {
 							target: "subCategorySelection",
 							actions: assign({
-								currentFoodId: undefined,
+								currentOrderItem: undefined,
 							}),
 						},
 					},
 				},
 				foodSummary: {
 					on: {
-						ADD_TO_CART: {
+						ADD_TO_ORDER: {
 							target: "categorySelection",
 							actions: assign({
-								cart: ({ event, context }) => {
-									if (!context.currentFoodId) {
-										throw new Error("No food selected")
-									}
-									return {
-										...context.cart,
-										[context.currentFoodId]:
-											(context.cart[context.currentFoodId] ?? 0) +
-											event.quantity,
-									}
-								},
+								order: ({ context }) =>
+									produce(context.order, (draft) => {
+										if (!context.currentOrderItem) {
+											throw new Error("No food selected")
+										}
+										draft.push(context.currentOrderItem)
+									}),
+								currentOrderItem: undefined,
+							}),
+						},
+						UPDATE_CURRENT_ORDER_ITEM: {
+							actions: assign({
+								currentOrderItem: ({ event, context }) =>
+									produce(context.currentOrderItem, (draft) => {
+										if (!draft) {
+											throw new Error("No food selected")
+										}
+										if (event.quantity !== undefined) {
+											draft.quantity = event.quantity
+										}
+										if (event.removedIngredientIds !== undefined) {
+											draft.removedIngredientIds = event.removedIngredientIds
+										}
+									}),
 							}),
 						},
 						BACK: {
 							target: "foodSelection",
 							actions: assign({
-								currentFoodId: undefined,
+								currentOrderItem: undefined,
 							}),
 						},
 					},
@@ -157,6 +190,14 @@ const machine = setup({
 		ordering: {
 			on: {
 				BACK: "selection.hist",
+				REMOVE_FROM_ORDER: {
+					actions: assign({
+						order: ({ context, event }) =>
+							produce(context.order, (draft) => {
+								draft.splice(event.index, 1)
+							}),
+					}),
+				},
 			},
 		},
 	},

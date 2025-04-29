@@ -11,6 +11,7 @@ export const orderRouter = router({
 				.object({
 					foodId: z.string(),
 					quantity: z.number(),
+					removedIngredientIds: z.array(z.string()),
 				})
 				.array(),
 		)
@@ -28,6 +29,11 @@ export const orderRouter = router({
 						create: opts.input.map((food) => ({
 							foodId: food.foodId,
 							quantity: food.quantity,
+							removedIngredients: {
+								connect: food.removedIngredientIds.map((id) => ({
+									id,
+								})),
+							},
 						})),
 					},
 				},

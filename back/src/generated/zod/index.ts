@@ -306,6 +306,7 @@ export const FoodSelectSchema: z.ZodType<Prisma.FoodSelect> = z.object({
 
 export const IngredientIncludeSchema: z.ZodType<Prisma.IngredientInclude> = z.object({
   foods: z.union([z.boolean(),z.lazy(() => FoodFindManyArgsSchema)]).optional(),
+  orderItemToRemoved: z.union([z.boolean(),z.lazy(() => OrderItemFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => IngredientCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -320,6 +321,7 @@ export const IngredientCountOutputTypeArgsSchema: z.ZodType<Prisma.IngredientCou
 
 export const IngredientCountOutputTypeSelectSchema: z.ZodType<Prisma.IngredientCountOutputTypeSelect> = z.object({
   foods: z.boolean().optional(),
+  orderItemToRemoved: z.boolean().optional(),
 }).strict();
 
 export const IngredientSelectSchema: z.ZodType<Prisma.IngredientSelect> = z.object({
@@ -330,6 +332,7 @@ export const IngredientSelectSchema: z.ZodType<Prisma.IngredientSelect> = z.obje
   noGluten: z.boolean().optional(),
   noLactose: z.boolean().optional(),
   foods: z.union([z.boolean(),z.lazy(() => FoodFindManyArgsSchema)]).optional(),
+  orderItemToRemoved: z.union([z.boolean(),z.lazy(() => OrderItemFindManyArgsSchema)]).optional(),
   _count: z.union([z.boolean(),z.lazy(() => IngredientCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
@@ -370,11 +373,21 @@ export const OrderSelectSchema: z.ZodType<Prisma.OrderSelect> = z.object({
 export const OrderItemIncludeSchema: z.ZodType<Prisma.OrderItemInclude> = z.object({
   order: z.union([z.boolean(),z.lazy(() => OrderArgsSchema)]).optional(),
   food: z.union([z.boolean(),z.lazy(() => FoodArgsSchema)]).optional(),
+  removedIngredients: z.union([z.boolean(),z.lazy(() => IngredientFindManyArgsSchema)]).optional(),
+  _count: z.union([z.boolean(),z.lazy(() => OrderItemCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
 export const OrderItemArgsSchema: z.ZodType<Prisma.OrderItemDefaultArgs> = z.object({
   select: z.lazy(() => OrderItemSelectSchema).optional(),
   include: z.lazy(() => OrderItemIncludeSchema).optional(),
+}).strict();
+
+export const OrderItemCountOutputTypeArgsSchema: z.ZodType<Prisma.OrderItemCountOutputTypeDefaultArgs> = z.object({
+  select: z.lazy(() => OrderItemCountOutputTypeSelectSchema).nullish(),
+}).strict();
+
+export const OrderItemCountOutputTypeSelectSchema: z.ZodType<Prisma.OrderItemCountOutputTypeSelect> = z.object({
+  removedIngredients: z.boolean().optional(),
 }).strict();
 
 export const OrderItemSelectSchema: z.ZodType<Prisma.OrderItemSelect> = z.object({
@@ -384,6 +397,8 @@ export const OrderItemSelectSchema: z.ZodType<Prisma.OrderItemSelect> = z.object
   quantity: z.boolean().optional(),
   order: z.union([z.boolean(),z.lazy(() => OrderArgsSchema)]).optional(),
   food: z.union([z.boolean(),z.lazy(() => FoodArgsSchema)]).optional(),
+  removedIngredients: z.union([z.boolean(),z.lazy(() => IngredientFindManyArgsSchema)]).optional(),
+  _count: z.union([z.boolean(),z.lazy(() => OrderItemCountOutputTypeArgsSchema)]).optional(),
 }).strict()
 
 // USER
@@ -710,7 +725,8 @@ export const IngredientWhereInputSchema: z.ZodType<Prisma.IngredientWhereInput> 
   halal: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   noGluten: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   noLactose: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
-  foods: z.lazy(() => FoodListRelationFilterSchema).optional()
+  foods: z.lazy(() => FoodListRelationFilterSchema).optional(),
+  orderItemToRemoved: z.lazy(() => OrderItemListRelationFilterSchema).optional()
 }).strict();
 
 export const IngredientOrderByWithRelationInputSchema: z.ZodType<Prisma.IngredientOrderByWithRelationInput> = z.object({
@@ -720,7 +736,8 @@ export const IngredientOrderByWithRelationInputSchema: z.ZodType<Prisma.Ingredie
   halal: z.lazy(() => SortOrderSchema).optional(),
   noGluten: z.lazy(() => SortOrderSchema).optional(),
   noLactose: z.lazy(() => SortOrderSchema).optional(),
-  foods: z.lazy(() => FoodOrderByRelationAggregateInputSchema).optional()
+  foods: z.lazy(() => FoodOrderByRelationAggregateInputSchema).optional(),
+  orderItemToRemoved: z.lazy(() => OrderItemOrderByRelationAggregateInputSchema).optional()
 }).strict();
 
 export const IngredientWhereUniqueInputSchema: z.ZodType<Prisma.IngredientWhereUniqueInput> = z.union([
@@ -745,7 +762,8 @@ export const IngredientWhereUniqueInputSchema: z.ZodType<Prisma.IngredientWhereU
   halal: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   noGluten: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
   noLactose: z.union([ z.lazy(() => BoolFilterSchema),z.boolean() ]).optional(),
-  foods: z.lazy(() => FoodListRelationFilterSchema).optional()
+  foods: z.lazy(() => FoodListRelationFilterSchema).optional(),
+  orderItemToRemoved: z.lazy(() => OrderItemListRelationFilterSchema).optional()
 }).strict());
 
 export const IngredientOrderByWithAggregationInputSchema: z.ZodType<Prisma.IngredientOrderByWithAggregationInput> = z.object({
@@ -842,6 +860,7 @@ export const OrderItemWhereInputSchema: z.ZodType<Prisma.OrderItemWhereInput> = 
   quantity: z.union([ z.lazy(() => IntFilterSchema),z.number() ]).optional(),
   order: z.union([ z.lazy(() => OrderScalarRelationFilterSchema),z.lazy(() => OrderWhereInputSchema) ]).optional(),
   food: z.union([ z.lazy(() => FoodScalarRelationFilterSchema),z.lazy(() => FoodWhereInputSchema) ]).optional(),
+  removedIngredients: z.lazy(() => IngredientListRelationFilterSchema).optional()
 }).strict();
 
 export const OrderItemOrderByWithRelationInputSchema: z.ZodType<Prisma.OrderItemOrderByWithRelationInput> = z.object({
@@ -850,7 +869,8 @@ export const OrderItemOrderByWithRelationInputSchema: z.ZodType<Prisma.OrderItem
   foodId: z.lazy(() => SortOrderSchema).optional(),
   quantity: z.lazy(() => SortOrderSchema).optional(),
   order: z.lazy(() => OrderOrderByWithRelationInputSchema).optional(),
-  food: z.lazy(() => FoodOrderByWithRelationInputSchema).optional()
+  food: z.lazy(() => FoodOrderByWithRelationInputSchema).optional(),
+  removedIngredients: z.lazy(() => IngredientOrderByRelationAggregateInputSchema).optional()
 }).strict();
 
 export const OrderItemWhereUniqueInputSchema: z.ZodType<Prisma.OrderItemWhereUniqueInput> = z.object({
@@ -866,6 +886,7 @@ export const OrderItemWhereUniqueInputSchema: z.ZodType<Prisma.OrderItemWhereUni
   quantity: z.union([ z.lazy(() => IntFilterSchema),z.number().int() ]).optional(),
   order: z.union([ z.lazy(() => OrderScalarRelationFilterSchema),z.lazy(() => OrderWhereInputSchema) ]).optional(),
   food: z.union([ z.lazy(() => FoodScalarRelationFilterSchema),z.lazy(() => FoodWhereInputSchema) ]).optional(),
+  removedIngredients: z.lazy(() => IngredientListRelationFilterSchema).optional()
 }).strict());
 
 export const OrderItemOrderByWithAggregationInputSchema: z.ZodType<Prisma.OrderItemOrderByWithAggregationInput> = z.object({
@@ -1415,7 +1436,8 @@ export const IngredientCreateInputSchema: z.ZodType<Prisma.IngredientCreateInput
   halal: z.boolean(),
   noGluten: z.boolean(),
   noLactose: z.boolean(),
-  foods: z.lazy(() => FoodCreateNestedManyWithoutIngredientsInputSchema).optional()
+  foods: z.lazy(() => FoodCreateNestedManyWithoutIngredientsInputSchema).optional(),
+  orderItemToRemoved: z.lazy(() => OrderItemCreateNestedManyWithoutRemovedIngredientsInputSchema).optional()
 }).strict();
 
 export const IngredientUncheckedCreateInputSchema: z.ZodType<Prisma.IngredientUncheckedCreateInput> = z.object({
@@ -1425,7 +1447,8 @@ export const IngredientUncheckedCreateInputSchema: z.ZodType<Prisma.IngredientUn
   halal: z.boolean(),
   noGluten: z.boolean(),
   noLactose: z.boolean(),
-  foods: z.lazy(() => FoodUncheckedCreateNestedManyWithoutIngredientsInputSchema).optional()
+  foods: z.lazy(() => FoodUncheckedCreateNestedManyWithoutIngredientsInputSchema).optional(),
+  orderItemToRemoved: z.lazy(() => OrderItemUncheckedCreateNestedManyWithoutRemovedIngredientsInputSchema).optional()
 }).strict();
 
 export const IngredientUpdateInputSchema: z.ZodType<Prisma.IngredientUpdateInput> = z.object({
@@ -1435,7 +1458,8 @@ export const IngredientUpdateInputSchema: z.ZodType<Prisma.IngredientUpdateInput
   halal: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   noGluten: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   noLactose: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  foods: z.lazy(() => FoodUpdateManyWithoutIngredientsNestedInputSchema).optional()
+  foods: z.lazy(() => FoodUpdateManyWithoutIngredientsNestedInputSchema).optional(),
+  orderItemToRemoved: z.lazy(() => OrderItemUpdateManyWithoutRemovedIngredientsNestedInputSchema).optional()
 }).strict();
 
 export const IngredientUncheckedUpdateInputSchema: z.ZodType<Prisma.IngredientUncheckedUpdateInput> = z.object({
@@ -1445,7 +1469,8 @@ export const IngredientUncheckedUpdateInputSchema: z.ZodType<Prisma.IngredientUn
   halal: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   noGluten: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   noLactose: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
-  foods: z.lazy(() => FoodUncheckedUpdateManyWithoutIngredientsNestedInputSchema).optional()
+  foods: z.lazy(() => FoodUncheckedUpdateManyWithoutIngredientsNestedInputSchema).optional(),
+  orderItemToRemoved: z.lazy(() => OrderItemUncheckedUpdateManyWithoutRemovedIngredientsNestedInputSchema).optional()
 }).strict();
 
 export const IngredientCreateManyInputSchema: z.ZodType<Prisma.IngredientCreateManyInput> = z.object({
@@ -1539,21 +1564,24 @@ export const OrderItemCreateInputSchema: z.ZodType<Prisma.OrderItemCreateInput> 
   id: z.string().cuid().optional(),
   quantity: z.number().int(),
   order: z.lazy(() => OrderCreateNestedOneWithoutItemsInputSchema),
-  food: z.lazy(() => FoodCreateNestedOneWithoutOrderItemInputSchema)
+  food: z.lazy(() => FoodCreateNestedOneWithoutOrderItemInputSchema),
+  removedIngredients: z.lazy(() => IngredientCreateNestedManyWithoutOrderItemToRemovedInputSchema).optional()
 }).strict();
 
 export const OrderItemUncheckedCreateInputSchema: z.ZodType<Prisma.OrderItemUncheckedCreateInput> = z.object({
   id: z.string().cuid().optional(),
   orderId: z.string(),
   foodId: z.string(),
-  quantity: z.number().int()
+  quantity: z.number().int(),
+  removedIngredients: z.lazy(() => IngredientUncheckedCreateNestedManyWithoutOrderItemToRemovedInputSchema).optional()
 }).strict();
 
 export const OrderItemUpdateInputSchema: z.ZodType<Prisma.OrderItemUpdateInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   order: z.lazy(() => OrderUpdateOneRequiredWithoutItemsNestedInputSchema).optional(),
-  food: z.lazy(() => FoodUpdateOneRequiredWithoutOrderItemNestedInputSchema).optional()
+  food: z.lazy(() => FoodUpdateOneRequiredWithoutOrderItemNestedInputSchema).optional(),
+  removedIngredients: z.lazy(() => IngredientUpdateManyWithoutOrderItemToRemovedNestedInputSchema).optional()
 }).strict();
 
 export const OrderItemUncheckedUpdateInputSchema: z.ZodType<Prisma.OrderItemUncheckedUpdateInput> = z.object({
@@ -1561,6 +1589,7 @@ export const OrderItemUncheckedUpdateInputSchema: z.ZodType<Prisma.OrderItemUnch
   orderId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   foodId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  removedIngredients: z.lazy(() => IngredientUncheckedUpdateManyWithoutOrderItemToRemovedNestedInputSchema).optional()
 }).strict();
 
 export const OrderItemCreateManyInputSchema: z.ZodType<Prisma.OrderItemCreateManyInput> = z.object({
@@ -2776,10 +2805,22 @@ export const FoodCreateNestedManyWithoutIngredientsInputSchema: z.ZodType<Prisma
   connect: z.union([ z.lazy(() => FoodWhereUniqueInputSchema),z.lazy(() => FoodWhereUniqueInputSchema).array() ]).optional(),
 }).strict();
 
+export const OrderItemCreateNestedManyWithoutRemovedIngredientsInputSchema: z.ZodType<Prisma.OrderItemCreateNestedManyWithoutRemovedIngredientsInput> = z.object({
+  create: z.union([ z.lazy(() => OrderItemCreateWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemCreateWithoutRemovedIngredientsInputSchema).array(),z.lazy(() => OrderItemUncheckedCreateWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemUncheckedCreateWithoutRemovedIngredientsInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => OrderItemCreateOrConnectWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemCreateOrConnectWithoutRemovedIngredientsInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => OrderItemWhereUniqueInputSchema),z.lazy(() => OrderItemWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
 export const FoodUncheckedCreateNestedManyWithoutIngredientsInputSchema: z.ZodType<Prisma.FoodUncheckedCreateNestedManyWithoutIngredientsInput> = z.object({
   create: z.union([ z.lazy(() => FoodCreateWithoutIngredientsInputSchema),z.lazy(() => FoodCreateWithoutIngredientsInputSchema).array(),z.lazy(() => FoodUncheckedCreateWithoutIngredientsInputSchema),z.lazy(() => FoodUncheckedCreateWithoutIngredientsInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => FoodCreateOrConnectWithoutIngredientsInputSchema),z.lazy(() => FoodCreateOrConnectWithoutIngredientsInputSchema).array() ]).optional(),
   connect: z.union([ z.lazy(() => FoodWhereUniqueInputSchema),z.lazy(() => FoodWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
+export const OrderItemUncheckedCreateNestedManyWithoutRemovedIngredientsInputSchema: z.ZodType<Prisma.OrderItemUncheckedCreateNestedManyWithoutRemovedIngredientsInput> = z.object({
+  create: z.union([ z.lazy(() => OrderItemCreateWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemCreateWithoutRemovedIngredientsInputSchema).array(),z.lazy(() => OrderItemUncheckedCreateWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemUncheckedCreateWithoutRemovedIngredientsInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => OrderItemCreateOrConnectWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemCreateOrConnectWithoutRemovedIngredientsInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => OrderItemWhereUniqueInputSchema),z.lazy(() => OrderItemWhereUniqueInputSchema).array() ]).optional(),
 }).strict();
 
 export const BoolFieldUpdateOperationsInputSchema: z.ZodType<Prisma.BoolFieldUpdateOperationsInput> = z.object({
@@ -2799,6 +2840,19 @@ export const FoodUpdateManyWithoutIngredientsNestedInputSchema: z.ZodType<Prisma
   deleteMany: z.union([ z.lazy(() => FoodScalarWhereInputSchema),z.lazy(() => FoodScalarWhereInputSchema).array() ]).optional(),
 }).strict();
 
+export const OrderItemUpdateManyWithoutRemovedIngredientsNestedInputSchema: z.ZodType<Prisma.OrderItemUpdateManyWithoutRemovedIngredientsNestedInput> = z.object({
+  create: z.union([ z.lazy(() => OrderItemCreateWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemCreateWithoutRemovedIngredientsInputSchema).array(),z.lazy(() => OrderItemUncheckedCreateWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemUncheckedCreateWithoutRemovedIngredientsInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => OrderItemCreateOrConnectWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemCreateOrConnectWithoutRemovedIngredientsInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => OrderItemUpsertWithWhereUniqueWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemUpsertWithWhereUniqueWithoutRemovedIngredientsInputSchema).array() ]).optional(),
+  set: z.union([ z.lazy(() => OrderItemWhereUniqueInputSchema),z.lazy(() => OrderItemWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => OrderItemWhereUniqueInputSchema),z.lazy(() => OrderItemWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => OrderItemWhereUniqueInputSchema),z.lazy(() => OrderItemWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => OrderItemWhereUniqueInputSchema),z.lazy(() => OrderItemWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => OrderItemUpdateWithWhereUniqueWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemUpdateWithWhereUniqueWithoutRemovedIngredientsInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => OrderItemUpdateManyWithWhereWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemUpdateManyWithWhereWithoutRemovedIngredientsInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => OrderItemScalarWhereInputSchema),z.lazy(() => OrderItemScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
 export const FoodUncheckedUpdateManyWithoutIngredientsNestedInputSchema: z.ZodType<Prisma.FoodUncheckedUpdateManyWithoutIngredientsNestedInput> = z.object({
   create: z.union([ z.lazy(() => FoodCreateWithoutIngredientsInputSchema),z.lazy(() => FoodCreateWithoutIngredientsInputSchema).array(),z.lazy(() => FoodUncheckedCreateWithoutIngredientsInputSchema),z.lazy(() => FoodUncheckedCreateWithoutIngredientsInputSchema).array() ]).optional(),
   connectOrCreate: z.union([ z.lazy(() => FoodCreateOrConnectWithoutIngredientsInputSchema),z.lazy(() => FoodCreateOrConnectWithoutIngredientsInputSchema).array() ]).optional(),
@@ -2810,6 +2864,19 @@ export const FoodUncheckedUpdateManyWithoutIngredientsNestedInputSchema: z.ZodTy
   update: z.union([ z.lazy(() => FoodUpdateWithWhereUniqueWithoutIngredientsInputSchema),z.lazy(() => FoodUpdateWithWhereUniqueWithoutIngredientsInputSchema).array() ]).optional(),
   updateMany: z.union([ z.lazy(() => FoodUpdateManyWithWhereWithoutIngredientsInputSchema),z.lazy(() => FoodUpdateManyWithWhereWithoutIngredientsInputSchema).array() ]).optional(),
   deleteMany: z.union([ z.lazy(() => FoodScalarWhereInputSchema),z.lazy(() => FoodScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
+export const OrderItemUncheckedUpdateManyWithoutRemovedIngredientsNestedInputSchema: z.ZodType<Prisma.OrderItemUncheckedUpdateManyWithoutRemovedIngredientsNestedInput> = z.object({
+  create: z.union([ z.lazy(() => OrderItemCreateWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemCreateWithoutRemovedIngredientsInputSchema).array(),z.lazy(() => OrderItemUncheckedCreateWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemUncheckedCreateWithoutRemovedIngredientsInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => OrderItemCreateOrConnectWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemCreateOrConnectWithoutRemovedIngredientsInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => OrderItemUpsertWithWhereUniqueWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemUpsertWithWhereUniqueWithoutRemovedIngredientsInputSchema).array() ]).optional(),
+  set: z.union([ z.lazy(() => OrderItemWhereUniqueInputSchema),z.lazy(() => OrderItemWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => OrderItemWhereUniqueInputSchema),z.lazy(() => OrderItemWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => OrderItemWhereUniqueInputSchema),z.lazy(() => OrderItemWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => OrderItemWhereUniqueInputSchema),z.lazy(() => OrderItemWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => OrderItemUpdateWithWhereUniqueWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemUpdateWithWhereUniqueWithoutRemovedIngredientsInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => OrderItemUpdateManyWithWhereWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemUpdateManyWithWhereWithoutRemovedIngredientsInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => OrderItemScalarWhereInputSchema),z.lazy(() => OrderItemScalarWhereInputSchema).array() ]).optional(),
 }).strict();
 
 export const OrderItemCreateNestedManyWithoutOrderInputSchema: z.ZodType<Prisma.OrderItemCreateNestedManyWithoutOrderInput> = z.object({
@@ -2870,6 +2937,18 @@ export const FoodCreateNestedOneWithoutOrderItemInputSchema: z.ZodType<Prisma.Fo
   connect: z.lazy(() => FoodWhereUniqueInputSchema).optional()
 }).strict();
 
+export const IngredientCreateNestedManyWithoutOrderItemToRemovedInputSchema: z.ZodType<Prisma.IngredientCreateNestedManyWithoutOrderItemToRemovedInput> = z.object({
+  create: z.union([ z.lazy(() => IngredientCreateWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientCreateWithoutOrderItemToRemovedInputSchema).array(),z.lazy(() => IngredientUncheckedCreateWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientUncheckedCreateWithoutOrderItemToRemovedInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => IngredientCreateOrConnectWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientCreateOrConnectWithoutOrderItemToRemovedInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => IngredientWhereUniqueInputSchema),z.lazy(() => IngredientWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
+export const IngredientUncheckedCreateNestedManyWithoutOrderItemToRemovedInputSchema: z.ZodType<Prisma.IngredientUncheckedCreateNestedManyWithoutOrderItemToRemovedInput> = z.object({
+  create: z.union([ z.lazy(() => IngredientCreateWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientCreateWithoutOrderItemToRemovedInputSchema).array(),z.lazy(() => IngredientUncheckedCreateWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientUncheckedCreateWithoutOrderItemToRemovedInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => IngredientCreateOrConnectWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientCreateOrConnectWithoutOrderItemToRemovedInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => IngredientWhereUniqueInputSchema),z.lazy(() => IngredientWhereUniqueInputSchema).array() ]).optional(),
+}).strict();
+
 export const OrderUpdateOneRequiredWithoutItemsNestedInputSchema: z.ZodType<Prisma.OrderUpdateOneRequiredWithoutItemsNestedInput> = z.object({
   create: z.union([ z.lazy(() => OrderCreateWithoutItemsInputSchema),z.lazy(() => OrderUncheckedCreateWithoutItemsInputSchema) ]).optional(),
   connectOrCreate: z.lazy(() => OrderCreateOrConnectWithoutItemsInputSchema).optional(),
@@ -2884,6 +2963,32 @@ export const FoodUpdateOneRequiredWithoutOrderItemNestedInputSchema: z.ZodType<P
   upsert: z.lazy(() => FoodUpsertWithoutOrderItemInputSchema).optional(),
   connect: z.lazy(() => FoodWhereUniqueInputSchema).optional(),
   update: z.union([ z.lazy(() => FoodUpdateToOneWithWhereWithoutOrderItemInputSchema),z.lazy(() => FoodUpdateWithoutOrderItemInputSchema),z.lazy(() => FoodUncheckedUpdateWithoutOrderItemInputSchema) ]).optional(),
+}).strict();
+
+export const IngredientUpdateManyWithoutOrderItemToRemovedNestedInputSchema: z.ZodType<Prisma.IngredientUpdateManyWithoutOrderItemToRemovedNestedInput> = z.object({
+  create: z.union([ z.lazy(() => IngredientCreateWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientCreateWithoutOrderItemToRemovedInputSchema).array(),z.lazy(() => IngredientUncheckedCreateWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientUncheckedCreateWithoutOrderItemToRemovedInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => IngredientCreateOrConnectWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientCreateOrConnectWithoutOrderItemToRemovedInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => IngredientUpsertWithWhereUniqueWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientUpsertWithWhereUniqueWithoutOrderItemToRemovedInputSchema).array() ]).optional(),
+  set: z.union([ z.lazy(() => IngredientWhereUniqueInputSchema),z.lazy(() => IngredientWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => IngredientWhereUniqueInputSchema),z.lazy(() => IngredientWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => IngredientWhereUniqueInputSchema),z.lazy(() => IngredientWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => IngredientWhereUniqueInputSchema),z.lazy(() => IngredientWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => IngredientUpdateWithWhereUniqueWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientUpdateWithWhereUniqueWithoutOrderItemToRemovedInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => IngredientUpdateManyWithWhereWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientUpdateManyWithWhereWithoutOrderItemToRemovedInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => IngredientScalarWhereInputSchema),z.lazy(() => IngredientScalarWhereInputSchema).array() ]).optional(),
+}).strict();
+
+export const IngredientUncheckedUpdateManyWithoutOrderItemToRemovedNestedInputSchema: z.ZodType<Prisma.IngredientUncheckedUpdateManyWithoutOrderItemToRemovedNestedInput> = z.object({
+  create: z.union([ z.lazy(() => IngredientCreateWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientCreateWithoutOrderItemToRemovedInputSchema).array(),z.lazy(() => IngredientUncheckedCreateWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientUncheckedCreateWithoutOrderItemToRemovedInputSchema).array() ]).optional(),
+  connectOrCreate: z.union([ z.lazy(() => IngredientCreateOrConnectWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientCreateOrConnectWithoutOrderItemToRemovedInputSchema).array() ]).optional(),
+  upsert: z.union([ z.lazy(() => IngredientUpsertWithWhereUniqueWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientUpsertWithWhereUniqueWithoutOrderItemToRemovedInputSchema).array() ]).optional(),
+  set: z.union([ z.lazy(() => IngredientWhereUniqueInputSchema),z.lazy(() => IngredientWhereUniqueInputSchema).array() ]).optional(),
+  disconnect: z.union([ z.lazy(() => IngredientWhereUniqueInputSchema),z.lazy(() => IngredientWhereUniqueInputSchema).array() ]).optional(),
+  delete: z.union([ z.lazy(() => IngredientWhereUniqueInputSchema),z.lazy(() => IngredientWhereUniqueInputSchema).array() ]).optional(),
+  connect: z.union([ z.lazy(() => IngredientWhereUniqueInputSchema),z.lazy(() => IngredientWhereUniqueInputSchema).array() ]).optional(),
+  update: z.union([ z.lazy(() => IngredientUpdateWithWhereUniqueWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientUpdateWithWhereUniqueWithoutOrderItemToRemovedInputSchema).array() ]).optional(),
+  updateMany: z.union([ z.lazy(() => IngredientUpdateManyWithWhereWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientUpdateManyWithWhereWithoutOrderItemToRemovedInputSchema).array() ]).optional(),
+  deleteMany: z.union([ z.lazy(() => IngredientScalarWhereInputSchema),z.lazy(() => IngredientScalarWhereInputSchema).array() ]).optional(),
 }).strict();
 
 export const SessionCreateNestedManyWithoutUserInputSchema: z.ZodType<Prisma.SessionCreateNestedManyWithoutUserInput> = z.object({
@@ -3385,7 +3490,8 @@ export const IngredientCreateWithoutFoodsInputSchema: z.ZodType<Prisma.Ingredien
   vegetarian: z.boolean(),
   halal: z.boolean(),
   noGluten: z.boolean(),
-  noLactose: z.boolean()
+  noLactose: z.boolean(),
+  orderItemToRemoved: z.lazy(() => OrderItemCreateNestedManyWithoutRemovedIngredientsInputSchema).optional()
 }).strict();
 
 export const IngredientUncheckedCreateWithoutFoodsInputSchema: z.ZodType<Prisma.IngredientUncheckedCreateWithoutFoodsInput> = z.object({
@@ -3394,7 +3500,8 @@ export const IngredientUncheckedCreateWithoutFoodsInputSchema: z.ZodType<Prisma.
   vegetarian: z.boolean(),
   halal: z.boolean(),
   noGluten: z.boolean(),
-  noLactose: z.boolean()
+  noLactose: z.boolean(),
+  orderItemToRemoved: z.lazy(() => OrderItemUncheckedCreateNestedManyWithoutRemovedIngredientsInputSchema).optional()
 }).strict();
 
 export const IngredientCreateOrConnectWithoutFoodsInputSchema: z.ZodType<Prisma.IngredientCreateOrConnectWithoutFoodsInput> = z.object({
@@ -3405,13 +3512,15 @@ export const IngredientCreateOrConnectWithoutFoodsInputSchema: z.ZodType<Prisma.
 export const OrderItemCreateWithoutFoodInputSchema: z.ZodType<Prisma.OrderItemCreateWithoutFoodInput> = z.object({
   id: z.string().cuid().optional(),
   quantity: z.number().int(),
-  order: z.lazy(() => OrderCreateNestedOneWithoutItemsInputSchema)
+  order: z.lazy(() => OrderCreateNestedOneWithoutItemsInputSchema),
+  removedIngredients: z.lazy(() => IngredientCreateNestedManyWithoutOrderItemToRemovedInputSchema).optional()
 }).strict();
 
 export const OrderItemUncheckedCreateWithoutFoodInputSchema: z.ZodType<Prisma.OrderItemUncheckedCreateWithoutFoodInput> = z.object({
   id: z.string().cuid().optional(),
   orderId: z.string(),
-  quantity: z.number().int()
+  quantity: z.number().int(),
+  removedIngredients: z.lazy(() => IngredientUncheckedCreateNestedManyWithoutOrderItemToRemovedInputSchema).optional()
 }).strict();
 
 export const OrderItemCreateOrConnectWithoutFoodInputSchema: z.ZodType<Prisma.OrderItemCreateOrConnectWithoutFoodInput> = z.object({
@@ -3530,6 +3639,25 @@ export const FoodCreateOrConnectWithoutIngredientsInputSchema: z.ZodType<Prisma.
   create: z.union([ z.lazy(() => FoodCreateWithoutIngredientsInputSchema),z.lazy(() => FoodUncheckedCreateWithoutIngredientsInputSchema) ]),
 }).strict();
 
+export const OrderItemCreateWithoutRemovedIngredientsInputSchema: z.ZodType<Prisma.OrderItemCreateWithoutRemovedIngredientsInput> = z.object({
+  id: z.string().cuid().optional(),
+  quantity: z.number().int(),
+  order: z.lazy(() => OrderCreateNestedOneWithoutItemsInputSchema),
+  food: z.lazy(() => FoodCreateNestedOneWithoutOrderItemInputSchema)
+}).strict();
+
+export const OrderItemUncheckedCreateWithoutRemovedIngredientsInputSchema: z.ZodType<Prisma.OrderItemUncheckedCreateWithoutRemovedIngredientsInput> = z.object({
+  id: z.string().cuid().optional(),
+  orderId: z.string(),
+  foodId: z.string(),
+  quantity: z.number().int()
+}).strict();
+
+export const OrderItemCreateOrConnectWithoutRemovedIngredientsInputSchema: z.ZodType<Prisma.OrderItemCreateOrConnectWithoutRemovedIngredientsInput> = z.object({
+  where: z.lazy(() => OrderItemWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => OrderItemCreateWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemUncheckedCreateWithoutRemovedIngredientsInputSchema) ]),
+}).strict();
+
 export const FoodUpsertWithWhereUniqueWithoutIngredientsInputSchema: z.ZodType<Prisma.FoodUpsertWithWhereUniqueWithoutIngredientsInput> = z.object({
   where: z.lazy(() => FoodWhereUniqueInputSchema),
   update: z.union([ z.lazy(() => FoodUpdateWithoutIngredientsInputSchema),z.lazy(() => FoodUncheckedUpdateWithoutIngredientsInputSchema) ]),
@@ -3546,16 +3674,34 @@ export const FoodUpdateManyWithWhereWithoutIngredientsInputSchema: z.ZodType<Pri
   data: z.union([ z.lazy(() => FoodUpdateManyMutationInputSchema),z.lazy(() => FoodUncheckedUpdateManyWithoutIngredientsInputSchema) ]),
 }).strict();
 
+export const OrderItemUpsertWithWhereUniqueWithoutRemovedIngredientsInputSchema: z.ZodType<Prisma.OrderItemUpsertWithWhereUniqueWithoutRemovedIngredientsInput> = z.object({
+  where: z.lazy(() => OrderItemWhereUniqueInputSchema),
+  update: z.union([ z.lazy(() => OrderItemUpdateWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemUncheckedUpdateWithoutRemovedIngredientsInputSchema) ]),
+  create: z.union([ z.lazy(() => OrderItemCreateWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemUncheckedCreateWithoutRemovedIngredientsInputSchema) ]),
+}).strict();
+
+export const OrderItemUpdateWithWhereUniqueWithoutRemovedIngredientsInputSchema: z.ZodType<Prisma.OrderItemUpdateWithWhereUniqueWithoutRemovedIngredientsInput> = z.object({
+  where: z.lazy(() => OrderItemWhereUniqueInputSchema),
+  data: z.union([ z.lazy(() => OrderItemUpdateWithoutRemovedIngredientsInputSchema),z.lazy(() => OrderItemUncheckedUpdateWithoutRemovedIngredientsInputSchema) ]),
+}).strict();
+
+export const OrderItemUpdateManyWithWhereWithoutRemovedIngredientsInputSchema: z.ZodType<Prisma.OrderItemUpdateManyWithWhereWithoutRemovedIngredientsInput> = z.object({
+  where: z.lazy(() => OrderItemScalarWhereInputSchema),
+  data: z.union([ z.lazy(() => OrderItemUpdateManyMutationInputSchema),z.lazy(() => OrderItemUncheckedUpdateManyWithoutRemovedIngredientsInputSchema) ]),
+}).strict();
+
 export const OrderItemCreateWithoutOrderInputSchema: z.ZodType<Prisma.OrderItemCreateWithoutOrderInput> = z.object({
   id: z.string().cuid().optional(),
   quantity: z.number().int(),
-  food: z.lazy(() => FoodCreateNestedOneWithoutOrderItemInputSchema)
+  food: z.lazy(() => FoodCreateNestedOneWithoutOrderItemInputSchema),
+  removedIngredients: z.lazy(() => IngredientCreateNestedManyWithoutOrderItemToRemovedInputSchema).optional()
 }).strict();
 
 export const OrderItemUncheckedCreateWithoutOrderInputSchema: z.ZodType<Prisma.OrderItemUncheckedCreateWithoutOrderInput> = z.object({
   id: z.string().cuid().optional(),
   foodId: z.string(),
-  quantity: z.number().int()
+  quantity: z.number().int(),
+  removedIngredients: z.lazy(() => IngredientUncheckedCreateNestedManyWithoutOrderItemToRemovedInputSchema).optional()
 }).strict();
 
 export const OrderItemCreateOrConnectWithoutOrderInputSchema: z.ZodType<Prisma.OrderItemCreateOrConnectWithoutOrderInput> = z.object({
@@ -3632,6 +3778,31 @@ export const FoodCreateOrConnectWithoutOrderItemInputSchema: z.ZodType<Prisma.Fo
   create: z.union([ z.lazy(() => FoodCreateWithoutOrderItemInputSchema),z.lazy(() => FoodUncheckedCreateWithoutOrderItemInputSchema) ]),
 }).strict();
 
+export const IngredientCreateWithoutOrderItemToRemovedInputSchema: z.ZodType<Prisma.IngredientCreateWithoutOrderItemToRemovedInput> = z.object({
+  id: z.string().cuid().optional(),
+  title: z.string(),
+  vegetarian: z.boolean(),
+  halal: z.boolean(),
+  noGluten: z.boolean(),
+  noLactose: z.boolean(),
+  foods: z.lazy(() => FoodCreateNestedManyWithoutIngredientsInputSchema).optional()
+}).strict();
+
+export const IngredientUncheckedCreateWithoutOrderItemToRemovedInputSchema: z.ZodType<Prisma.IngredientUncheckedCreateWithoutOrderItemToRemovedInput> = z.object({
+  id: z.string().cuid().optional(),
+  title: z.string(),
+  vegetarian: z.boolean(),
+  halal: z.boolean(),
+  noGluten: z.boolean(),
+  noLactose: z.boolean(),
+  foods: z.lazy(() => FoodUncheckedCreateNestedManyWithoutIngredientsInputSchema).optional()
+}).strict();
+
+export const IngredientCreateOrConnectWithoutOrderItemToRemovedInputSchema: z.ZodType<Prisma.IngredientCreateOrConnectWithoutOrderItemToRemovedInput> = z.object({
+  where: z.lazy(() => IngredientWhereUniqueInputSchema),
+  create: z.union([ z.lazy(() => IngredientCreateWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientUncheckedCreateWithoutOrderItemToRemovedInputSchema) ]),
+}).strict();
+
 export const OrderUpsertWithoutItemsInputSchema: z.ZodType<Prisma.OrderUpsertWithoutItemsInput> = z.object({
   update: z.union([ z.lazy(() => OrderUpdateWithoutItemsInputSchema),z.lazy(() => OrderUncheckedUpdateWithoutItemsInputSchema) ]),
   create: z.union([ z.lazy(() => OrderCreateWithoutItemsInputSchema),z.lazy(() => OrderUncheckedCreateWithoutItemsInputSchema) ]),
@@ -3690,6 +3861,22 @@ export const FoodUncheckedUpdateWithoutOrderItemInputSchema: z.ZodType<Prisma.Fo
   price: z.union([ z.number(),z.lazy(() => FloatFieldUpdateOperationsInputSchema) ]).optional(),
   estimatedTimeMn: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
   ingredients: z.lazy(() => IngredientUncheckedUpdateManyWithoutFoodsNestedInputSchema).optional()
+}).strict();
+
+export const IngredientUpsertWithWhereUniqueWithoutOrderItemToRemovedInputSchema: z.ZodType<Prisma.IngredientUpsertWithWhereUniqueWithoutOrderItemToRemovedInput> = z.object({
+  where: z.lazy(() => IngredientWhereUniqueInputSchema),
+  update: z.union([ z.lazy(() => IngredientUpdateWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientUncheckedUpdateWithoutOrderItemToRemovedInputSchema) ]),
+  create: z.union([ z.lazy(() => IngredientCreateWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientUncheckedCreateWithoutOrderItemToRemovedInputSchema) ]),
+}).strict();
+
+export const IngredientUpdateWithWhereUniqueWithoutOrderItemToRemovedInputSchema: z.ZodType<Prisma.IngredientUpdateWithWhereUniqueWithoutOrderItemToRemovedInput> = z.object({
+  where: z.lazy(() => IngredientWhereUniqueInputSchema),
+  data: z.union([ z.lazy(() => IngredientUpdateWithoutOrderItemToRemovedInputSchema),z.lazy(() => IngredientUncheckedUpdateWithoutOrderItemToRemovedInputSchema) ]),
+}).strict();
+
+export const IngredientUpdateManyWithWhereWithoutOrderItemToRemovedInputSchema: z.ZodType<Prisma.IngredientUpdateManyWithWhereWithoutOrderItemToRemovedInput> = z.object({
+  where: z.lazy(() => IngredientScalarWhereInputSchema),
+  data: z.union([ z.lazy(() => IngredientUpdateManyMutationInputSchema),z.lazy(() => IngredientUncheckedUpdateManyWithoutOrderItemToRemovedInputSchema) ]),
 }).strict();
 
 export const SessionCreateWithoutUserInputSchema: z.ZodType<Prisma.SessionCreateWithoutUserInput> = z.object({
@@ -4069,6 +4256,7 @@ export const IngredientUpdateWithoutFoodsInputSchema: z.ZodType<Prisma.Ingredien
   halal: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   noGluten: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   noLactose: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  orderItemToRemoved: z.lazy(() => OrderItemUpdateManyWithoutRemovedIngredientsNestedInputSchema).optional()
 }).strict();
 
 export const IngredientUncheckedUpdateWithoutFoodsInputSchema: z.ZodType<Prisma.IngredientUncheckedUpdateWithoutFoodsInput> = z.object({
@@ -4078,6 +4266,7 @@ export const IngredientUncheckedUpdateWithoutFoodsInputSchema: z.ZodType<Prisma.
   halal: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   noGluten: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
   noLactose: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  orderItemToRemoved: z.lazy(() => OrderItemUncheckedUpdateManyWithoutRemovedIngredientsNestedInputSchema).optional()
 }).strict();
 
 export const IngredientUncheckedUpdateManyWithoutFoodsInputSchema: z.ZodType<Prisma.IngredientUncheckedUpdateManyWithoutFoodsInput> = z.object({
@@ -4092,13 +4281,15 @@ export const IngredientUncheckedUpdateManyWithoutFoodsInputSchema: z.ZodType<Pri
 export const OrderItemUpdateWithoutFoodInputSchema: z.ZodType<Prisma.OrderItemUpdateWithoutFoodInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  order: z.lazy(() => OrderUpdateOneRequiredWithoutItemsNestedInputSchema).optional()
+  order: z.lazy(() => OrderUpdateOneRequiredWithoutItemsNestedInputSchema).optional(),
+  removedIngredients: z.lazy(() => IngredientUpdateManyWithoutOrderItemToRemovedNestedInputSchema).optional()
 }).strict();
 
 export const OrderItemUncheckedUpdateWithoutFoodInputSchema: z.ZodType<Prisma.OrderItemUncheckedUpdateWithoutFoodInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   orderId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  removedIngredients: z.lazy(() => IngredientUncheckedUpdateManyWithoutOrderItemToRemovedNestedInputSchema).optional()
 }).strict();
 
 export const OrderItemUncheckedUpdateManyWithoutFoodInputSchema: z.ZodType<Prisma.OrderItemUncheckedUpdateManyWithoutFoodInput> = z.object({
@@ -4139,6 +4330,27 @@ export const FoodUncheckedUpdateManyWithoutIngredientsInputSchema: z.ZodType<Pri
   estimatedTimeMn: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
+export const OrderItemUpdateWithoutRemovedIngredientsInputSchema: z.ZodType<Prisma.OrderItemUpdateWithoutRemovedIngredientsInput> = z.object({
+  id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  order: z.lazy(() => OrderUpdateOneRequiredWithoutItemsNestedInputSchema).optional(),
+  food: z.lazy(() => FoodUpdateOneRequiredWithoutOrderItemNestedInputSchema).optional()
+}).strict();
+
+export const OrderItemUncheckedUpdateWithoutRemovedIngredientsInputSchema: z.ZodType<Prisma.OrderItemUncheckedUpdateWithoutRemovedIngredientsInput> = z.object({
+  id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  orderId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  foodId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const OrderItemUncheckedUpdateManyWithoutRemovedIngredientsInputSchema: z.ZodType<Prisma.OrderItemUncheckedUpdateManyWithoutRemovedIngredientsInput> = z.object({
+  id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  orderId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  foodId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
 export const OrderItemCreateManyOrderInputSchema: z.ZodType<Prisma.OrderItemCreateManyOrderInput> = z.object({
   id: z.string().cuid().optional(),
   foodId: z.string(),
@@ -4148,19 +4360,50 @@ export const OrderItemCreateManyOrderInputSchema: z.ZodType<Prisma.OrderItemCrea
 export const OrderItemUpdateWithoutOrderInputSchema: z.ZodType<Prisma.OrderItemUpdateWithoutOrderInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
-  food: z.lazy(() => FoodUpdateOneRequiredWithoutOrderItemNestedInputSchema).optional()
+  food: z.lazy(() => FoodUpdateOneRequiredWithoutOrderItemNestedInputSchema).optional(),
+  removedIngredients: z.lazy(() => IngredientUpdateManyWithoutOrderItemToRemovedNestedInputSchema).optional()
 }).strict();
 
 export const OrderItemUncheckedUpdateWithoutOrderInputSchema: z.ZodType<Prisma.OrderItemUncheckedUpdateWithoutOrderInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   foodId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+  removedIngredients: z.lazy(() => IngredientUncheckedUpdateManyWithoutOrderItemToRemovedNestedInputSchema).optional()
 }).strict();
 
 export const OrderItemUncheckedUpdateManyWithoutOrderInputSchema: z.ZodType<Prisma.OrderItemUncheckedUpdateManyWithoutOrderInput> = z.object({
   id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   foodId: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
   quantity: z.union([ z.number().int(),z.lazy(() => IntFieldUpdateOperationsInputSchema) ]).optional(),
+}).strict();
+
+export const IngredientUpdateWithoutOrderItemToRemovedInputSchema: z.ZodType<Prisma.IngredientUpdateWithoutOrderItemToRemovedInput> = z.object({
+  id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  vegetarian: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  halal: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  noGluten: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  noLactose: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  foods: z.lazy(() => FoodUpdateManyWithoutIngredientsNestedInputSchema).optional()
+}).strict();
+
+export const IngredientUncheckedUpdateWithoutOrderItemToRemovedInputSchema: z.ZodType<Prisma.IngredientUncheckedUpdateWithoutOrderItemToRemovedInput> = z.object({
+  id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  vegetarian: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  halal: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  noGluten: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  noLactose: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  foods: z.lazy(() => FoodUncheckedUpdateManyWithoutIngredientsNestedInputSchema).optional()
+}).strict();
+
+export const IngredientUncheckedUpdateManyWithoutOrderItemToRemovedInputSchema: z.ZodType<Prisma.IngredientUncheckedUpdateManyWithoutOrderItemToRemovedInput> = z.object({
+  id: z.union([ z.string().cuid(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  title: z.union([ z.string(),z.lazy(() => StringFieldUpdateOperationsInputSchema) ]).optional(),
+  vegetarian: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  halal: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  noGluten: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
+  noLactose: z.union([ z.boolean(),z.lazy(() => BoolFieldUpdateOperationsInputSchema) ]).optional(),
 }).strict();
 
 export const SessionCreateManyUserInputSchema: z.ZodType<Prisma.SessionCreateManyUserInput> = z.object({

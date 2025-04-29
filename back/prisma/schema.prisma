@@ -48,13 +48,14 @@ model Food {
 }
 
 model Ingredient {
-  id         String  @id @default(cuid())
-  title      String  @unique
-  foods      Food[]
-  vegetarian Boolean
-  halal      Boolean
-  noGluten   Boolean
-  noLactose  Boolean
+  id                 String      @id @default(cuid())
+  title              String      @unique
+  foods              Food[]
+  vegetarian         Boolean
+  halal              Boolean
+  noGluten           Boolean
+  noLactose          Boolean
+  orderItemToRemoved OrderItem[]
 }
 
 model Order {
@@ -67,12 +68,13 @@ model Order {
 }
 
 model OrderItem {
-  id       String @id @default(cuid())
-  orderId  String
-  order    Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  foodId   String
-  food     Food   @relation(fields: [foodId], references: [id], onDelete: Cascade)
-  quantity Int
+  id                 String       @id @default(cuid())
+  orderId            String
+  order              Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  foodId             String
+  food               Food         @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  quantity           Int
+  removedIngredients Ingredient[]
 }
 
 model User {
