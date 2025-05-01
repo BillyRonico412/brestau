@@ -18,6 +18,10 @@
   },
   "linter": {
     "enabled": true,
+    "ignore": [
+      "./back/src/generated",
+      "./back/src/utils/zAsyncIterable.ts"
+    ],
     "rules": {
       "all": true,
       "style": {
