@@ -1,20 +1,16 @@
 import { envParsed } from "@/lib/envParsed"
-import type { AppRouter } from "../../../back/src/export"
 import { QueryClient } from "@tanstack/react-query"
 import {
 	createTRPCClient,
 	httpBatchLink,
 	httpLink,
-	splitLink,
-	loggerLink,
 	httpSubscriptionLink,
+	loggerLink,
+	splitLink,
 } from "@trpc/client"
-import type {
-	inferRouterInputs,
-	inferRouterOutputs,
-	inferTransformedSubscriptionOutput,
-} from "@trpc/server"
+import type { inferRouterInputs, inferRouterOutputs } from "@trpc/server"
 import { createTRPCOptionsProxy } from "@trpc/tanstack-react-query"
+import type { AppRouter } from "../../../back/src/export"
 
 export const queryClient = new QueryClient()
 
@@ -37,7 +33,7 @@ const trpcClient = createTRPCClient<AppRouter>({
 					url: `${envParsed.VITE_BACK_URL}/trpc`,
 					eventSourceOptions() {
 						return {
-							withCredentials: true, // <---
+							withCredentials: true,
 						}
 					},
 				}),

@@ -3,7 +3,6 @@ import { prismaClient } from "@back/utils/prisma"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import { admin } from "better-auth/plugins"
-import { UserType } from "shared"
 
 export const auth = betterAuth({
 	database: prismaAdapter(prismaClient, {
@@ -30,7 +29,7 @@ export const auth = betterAuth({
 			userType: {
 				type: "string",
 				required: true,
-				defaultValue: UserType.USER,
+				defaultValue: "user",
 			},
 		},
 	},

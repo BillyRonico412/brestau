@@ -1,6 +1,5 @@
 import type { auth } from "@back/utils/auth"
 import { initTRPC, TRPCError } from "@trpc/server"
-import { UserType } from "shared"
 
 const t = initTRPC
 	.context<{
@@ -19,7 +18,7 @@ export const adminProcedure = t.procedure.use((opts) => {
 			message: "You must be logged in to access this resource",
 		})
 	}
-	if (opts.ctx.user?.userType !== UserType.ADMIN) {
+	if (opts.ctx.user?.userType !== "admin") {
 		throw new TRPCError({
 			code: "FORBIDDEN",
 			message: "You do not have permission to access this resource.",
@@ -41,8 +40,8 @@ export const cookProcedure = t.procedure.use((opts) => {
 		})
 	}
 	if (
-		opts.ctx.user?.userType !== UserType.COOK &&
-		opts.ctx.user?.userType !== UserType.ADMIN
+		opts.ctx.user?.userType !== "cook" &&
+		opts.ctx.user?.userType !== "admin"
 	) {
 		throw new TRPCError({
 			code: "FORBIDDEN",
