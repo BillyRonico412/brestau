@@ -8,7 +8,7 @@ export const Route = createFileRoute("/admin")({
 	component: RouteComponent,
 	async beforeLoad(ctx) {
 		const session = await authClient.getSession()
-		if (!session.data) {
+		if (!session.data || session.data.user.userType !== "admin") {
 			throw redirect({
 				to: "/login",
 				search: {

@@ -1,7 +1,11 @@
+import { OrderStatusSchema } from "@back/generated/zod"
 import { prismaClient } from "@back/utils/prisma"
 import { createStripeSessionByOrder, stripe } from "@back/utils/stripe"
-import { publicProcedure, router } from "@back/utils/trpc"
+import { eventEmitter, eventNames } from "@back/utils/subscription"
+import { cookProcedure, publicProcedure, router } from "@back/utils/trpc"
+import { zAsyncIterable } from "@back/utils/zAsyncIterable"
 import { TRPCError } from "@trpc/server"
+import { on } from "events"
 import { z } from "zod"
 
 export const orderRouter = router({
@@ -38,8 +42,10 @@ export const orderRouter = router({
 					},
 				},
 			})
+			eventEmitter.emit(eventNames.ORDER_UPDATED)
 			return session.url
 		}),
+
 	getFoodByOrderId: publicProcedure
 		.input(
 			z.object({
@@ -49,12 +55,8 @@ export const orderRouter = router({
 		.query(async (opts) => {
 			const order = await prismaClient.order.findUnique({
 				where: { id: opts.input.id },
-				include: {
-					items: {
-						include: {
-							food: true,
-						},
-					},
+				select: {
+					stripeSessionId: true,
 				},
 			})
 			if (!order) {
@@ -81,6 +83,107 @@ export const orderRouter = router({
 					message: "Payment not succeeded",
 				})
 			}
-			return order
+			const orderUpdated = await prismaClient.order.update({
+				where: { id: opts.input.id },
+				data: {
+					stripeStatus: "PAID",
+				},
+				include: {
+					items: {
+						include: {
+							food: true,
+						},
+					},
+				},
+			})
+			eventEmitter.emit(eventNames.ORDER_CREATED)
+			eventEmitter.emit(eventNames.ORDER_UPDATED)
+			return orderUpdated
+		}),
+	notifyUpdateOrder: publicProcedure
+		.output(
+			zAsyncIterable({
+				yield: z.number(),
+			}),
+		)
+		.subscription(async function* (opts) {
+			for await (const _ of on(eventEmitter, eventNames.ORDER_UPDATED, {
+				signal: opts.signal,
+			})) {
+				yield Date.now()
+			}
+		}),
+	notifyCreateOrder: cookProcedure
+		.output(
+			zAsyncIterable({
+				yield: z.number(),
+			}),
+		)
+		.subscription(async function* (opts) {
+			for await (const _ of on(eventEmitter, eventNames.ORDER_CREATED, {
+				signal: opts.signal,
+			})) {
+				yield Date.now()
+			}
+		}),
+
+	getOrderItems: cookProcedure.query(async () => {
+		const orders = await prismaClient.order.findMany({
+			where: {
+				stripeStatus: "PAID",
+				items: {
+					some: {
+						status: {
+							in: ["IN_PROGRESS", "PENDING"],
+						},
+					},
+				},
+			},
+			orderBy: {
+				counter: "asc",
+			},
+			include: {
+				items: {
+					include: {
+						food: true,
+						removedIngredients: true,
+						cooker: {
+							select: {
+								id: true,
+								name: true,
+							},
+						},
+					},
+				},
+			},
+		})
+		return orders
+	}),
+	updateOrderItemStatus: cookProcedure
+		.input(
+			z.object({
+				orderItemId: z.string(),
+				orderItemStatus: OrderStatusSchema,
+				cookerId: z.string(),
+			}),
+		)
+		.mutation(async (opts) => {
+			const orderItem = await prismaClient.orderItem.update({
+				where: {
+					id: opts.input.orderItemId,
+				},
+				data: {
+					status: opts.input.orderItemStatus,
+					cookerId: opts.input.cookerId,
+				},
+			})
+			if (!orderItem) {
+				throw new TRPCError({
+					code: "NOT_FOUND",
+					message: "Order item not found",
+				})
+			}
+			eventEmitter.emit(eventNames.ORDER_UPDATED)
+			return orderItem
 		}),
 })

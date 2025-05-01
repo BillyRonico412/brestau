@@ -93,7 +93,7 @@ export const AdminSidebar = () => {
 								onSuccess() {
 									toast.success("Déconnexion réussie")
 									navigate({
-										to: "/",
+										to: "/login",
 									})
 								},
 							},

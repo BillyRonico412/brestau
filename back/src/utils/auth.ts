@@ -3,12 +3,7 @@ import { prismaClient } from "@back/utils/prisma"
 import { betterAuth } from "better-auth"
 import { prismaAdapter } from "better-auth/adapters/prisma"
 import { admin } from "better-auth/plugins"
-
-export const UserType = {
-	ADMIN: "admin",
-	USER: "user",
-	COOK: "cook",
-} as const
+import { UserType } from "shared"
 
 export const auth = betterAuth({
 	database: prismaAdapter(prismaClient, {

@@ -11,9 +11,10 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as LoginImport } from './routes/login'
 import { Route as AdminRouteImport } from './routes/admin/route'
 import { Route as IndexImport } from './routes/index'
-import { Route as LoginIndexImport } from './routes/login/index'
+import { Route as CookIndexImport } from './routes/cook/index'
 import { Route as PaymentSuccessImport } from './routes/payment/success'
 import { Route as PaymentCancelImport } from './routes/payment/cancel'
 import { Route as AdminSubcategoriesIndexImport } from './routes/admin/subcategories/index'
@@ -22,6 +23,12 @@ import { Route as AdminFoodsIndexImport } from './routes/admin/foods/index'
 import { Route as AdminCategoriesIndexImport } from './routes/admin/categories/index'
 
 // Create/Update Routes
+
+const LoginRoute = LoginImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const AdminRouteRoute = AdminRouteImport.update({
   id: '/admin',
@@ -35,9 +42,9 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
-const LoginIndexRoute = LoginIndexImport.update({
-  id: '/login/',
-  path: '/login/',
+const CookIndexRoute = CookIndexImport.update({
+  id: '/cook/',
+  path: '/cook/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -95,6 +102,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AdminRouteImport
       parentRoute: typeof rootRoute
     }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginImport
+      parentRoute: typeof rootRoute
+    }
     '/payment/cancel': {
       id: '/payment/cancel'
       path: '/payment/cancel'
@@ -109,11 +123,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PaymentSuccessImport
       parentRoute: typeof rootRoute
     }
-    '/login/': {
-      id: '/login/'
-      path: '/login'
-      fullPath: '/login'
-      preLoaderRoute: typeof LoginIndexImport
+    '/cook/': {
+      id: '/cook/'
+      path: '/cook'
+      fullPath: '/cook'
+      preLoaderRoute: typeof CookIndexImport
       parentRoute: typeof rootRoute
     }
     '/admin/categories/': {
@@ -170,9 +184,10 @@ const AdminRouteRouteWithChildren = AdminRouteRoute._addFileChildren(
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/login': typeof LoginRoute
   '/payment/cancel': typeof PaymentCancelRoute
   '/payment/success': typeof PaymentSuccessRoute
-  '/login': typeof LoginIndexRoute
+  '/cook': typeof CookIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/foods': typeof AdminFoodsIndexRoute
   '/admin/ingredients': typeof AdminIngredientsIndexRoute
@@ -182,9 +197,10 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/login': typeof LoginRoute
   '/payment/cancel': typeof PaymentCancelRoute
   '/payment/success': typeof PaymentSuccessRoute
-  '/login': typeof LoginIndexRoute
+  '/cook': typeof CookIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/foods': typeof AdminFoodsIndexRoute
   '/admin/ingredients': typeof AdminIngredientsIndexRoute
@@ -195,9 +211,10 @@ export interface FileRoutesById {
   __root__: typeof rootRoute
   '/': typeof IndexRoute
   '/admin': typeof AdminRouteRouteWithChildren
+  '/login': typeof LoginRoute
   '/payment/cancel': typeof PaymentCancelRoute
   '/payment/success': typeof PaymentSuccessRoute
-  '/login/': typeof LoginIndexRoute
+  '/cook/': typeof CookIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/foods/': typeof AdminFoodsIndexRoute
   '/admin/ingredients/': typeof AdminIngredientsIndexRoute
@@ -209,9 +226,10 @@ export interface FileRouteTypes {
   fullPaths:
     | '/'
     | '/admin'
+    | '/login'
     | '/payment/cancel'
     | '/payment/success'
-    | '/login'
+    | '/cook'
     | '/admin/categories'
     | '/admin/foods'
     | '/admin/ingredients'
@@ -220,9 +238,10 @@ export interface FileRouteTypes {
   to:
     | '/'
     | '/admin'
+    | '/login'
     | '/payment/cancel'
     | '/payment/success'
-    | '/login'
+    | '/cook'
     | '/admin/categories'
     | '/admin/foods'
     | '/admin/ingredients'
@@ -231,9 +250,10 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/admin'
+    | '/login'
     | '/payment/cancel'
     | '/payment/success'
-    | '/login/'
+    | '/cook/'
     | '/admin/categories/'
     | '/admin/foods/'
     | '/admin/ingredients/'
@@ -244,17 +264,19 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AdminRouteRoute: typeof AdminRouteRouteWithChildren
+  LoginRoute: typeof LoginRoute
   PaymentCancelRoute: typeof PaymentCancelRoute
   PaymentSuccessRoute: typeof PaymentSuccessRoute
-  LoginIndexRoute: typeof LoginIndexRoute
+  CookIndexRoute: typeof CookIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AdminRouteRoute: AdminRouteRouteWithChildren,
+  LoginRoute: LoginRoute,
   PaymentCancelRoute: PaymentCancelRoute,
   PaymentSuccessRoute: PaymentSuccessRoute,
-  LoginIndexRoute: LoginIndexRoute,
+  CookIndexRoute: CookIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -269,9 +291,10 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/admin",
+        "/login",
         "/payment/cancel",
         "/payment/success",
-        "/login/"
+        "/cook/"
       ]
     },
     "/": {
@@ -286,14 +309,17 @@ export const routeTree = rootRoute
         "/admin/subcategories/"
       ]
     },
+    "/login": {
+      "filePath": "login.tsx"
+    },
     "/payment/cancel": {
       "filePath": "payment/cancel.tsx"
     },
     "/payment/success": {
       "filePath": "payment/success.tsx"
     },
-    "/login/": {
-      "filePath": "login/index.tsx"
+    "/cook/": {
+      "filePath": "cook/index.tsx"
     },
     "/admin/categories/": {
       "filePath": "admin/categories/index.tsx",

@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
 function IndexComponent() {
 	const state = useAtomValue(machineAtom)
 	return (
-		<div className="h-dvh w-dvw overflow-hidden">
+		<div className="h-dvh w-dvw overflow-hidden font-display">
 			<QueryErrorBoundary>
 				<QuerySuspense>
 					{match(state)

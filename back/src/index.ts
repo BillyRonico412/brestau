@@ -1,5 +1,5 @@
 import { trpcServer } from "@hono/trpc-server"
-import { Hono } from "hono"
+import { Context, Hono } from "hono"
 import { cors } from "hono/cors"
 import { logger } from "hono/logger"
 import { appRouter } from "@back/routers/appRouter"
@@ -68,7 +68,15 @@ app.use(
 	"/trpc/*",
 	trpcServer({
 		router: appRouter,
-		createContext(_, c) {
+		createContext(
+			_,
+			c: Context<{
+				Variables: {
+					user: typeof auth.$Infer.Session.user | null
+					session: typeof auth.$Infer.Session.session | null
+				}
+			}>,
+		) {
 			const user = c.get("user")
 			const session = c.get("session")
 			return {

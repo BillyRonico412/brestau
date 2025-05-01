@@ -44,7 +44,7 @@ model Food {
   price           Float
   ingredients     Ingredient[]
   estimatedTimeMn Int
-  OrderItem       OrderItem[]
+  orderItem       OrderItem[]
 }
 
 model Ingredient {
@@ -58,13 +58,29 @@ model Ingredient {
   orderItemToRemoved OrderItem[]
 }
 
+enum OrderStatus {
+  PENDING
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum StripeStatus {
+  PENDING
+  PAID
+  FAILED
+}
+
 model Order {
-  id              String      @id @default(cuid())
-  counter         Int         @default(autoincrement())
+  id              String       @id @default(cuid())
+  counter         Int          @default(autoincrement())
   items           OrderItem[]
   stripeSessionId String
-  createdAt       DateTime    @default(now())
-  updatedAt       DateTime    @updatedAt
+  stripeStatus    StripeStatus @default(PENDING)
+  serverId        String?
+  server          User?        @relation(fields: [serverId], references: [id], onDelete: SetNull)
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
 }
 
 model OrderItem {
@@ -74,24 +90,29 @@ model OrderItem {
   foodId             String
   food               Food         @relation(fields: [foodId], references: [id], onDelete: Cascade)
   quantity           Int
+  status             OrderStatus  @default(PENDING)
   removedIngredients Ingredient[]
+  cookerId           String?
+  cooker             User?        @relation(fields: [cookerId], references: [id], onDelete: SetNull)
 }
 
 model User {
-  id            String    @id
-  name          String
-  email         String
-  emailVerified Boolean
-  image         String?
-  createdAt     DateTime
-  updatedAt     DateTime
-  role          String?
-  banned        Boolean?
-  banReason     String?
-  banExpires    DateTime?
-  userType      String
-  sessions      Session[]
-  accounts      Account[]
+  id               String      @id
+  name             String
+  email            String
+  emailVerified    Boolean
+  image            String?
+  createdAt        DateTime
+  updatedAt        DateTime
+  role             String?
+  banned           Boolean?
+  banReason        String?
+  banExpires       DateTime?
+  userType         String
+  sessions         Session[]
+  accounts         Account[]
+  cookerOrderItems OrderItem[]
+  serverOrders     Order[]
 
   @@unique([email])
   @@map("user")

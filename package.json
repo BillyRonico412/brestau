@@ -12,6 +12,7 @@
   },
   "workspaces": [
     "front",
-    "back"
+    "back",
+    "shared"
   ]
 }
