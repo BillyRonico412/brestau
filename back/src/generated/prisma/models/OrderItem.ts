@@ -38,7 +38,7 @@ export type OrderItemMinAggregateOutputType = {
   orderId: string | null
   foodId: string | null
   quantity: number | null
-  status: $Enums.OrderStatus | null
+  status: $Enums.OrderItemStatus | null
   cookerId: string | null
 }
 
@@ -47,7 +47,7 @@ export type OrderItemMaxAggregateOutputType = {
   orderId: string | null
   foodId: string | null
   quantity: number | null
-  status: $Enums.OrderStatus | null
+  status: $Enums.OrderItemStatus | null
   cookerId: string | null
 }
 
@@ -189,7 +189,7 @@ export type OrderItemGroupByOutputType = {
   orderId: string
   foodId: string
   quantity: number
-  status: $Enums.OrderStatus
+  status: $Enums.OrderItemStatus
   cookerId: string | null
   _count: OrderItemCountAggregateOutputType | null
   _avg: OrderItemAvgAggregateOutputType | null
@@ -221,7 +221,7 @@ export type OrderItemWhereInput = {
   orderId?: Prisma.StringFilter<"OrderItem"> | string
   foodId?: Prisma.StringFilter<"OrderItem"> | string
   quantity?: Prisma.IntFilter<"OrderItem"> | number
-  status?: Prisma.EnumOrderStatusFilter<"OrderItem"> | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFilter<"OrderItem"> | $Enums.OrderItemStatus
   cookerId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
   food?: Prisma.XOR<Prisma.FoodScalarRelationFilter, Prisma.FoodWhereInput>
@@ -250,7 +250,7 @@ export type OrderItemWhereUniqueInput = Prisma.AtLeast<{
   orderId?: Prisma.StringFilter<"OrderItem"> | string
   foodId?: Prisma.StringFilter<"OrderItem"> | string
   quantity?: Prisma.IntFilter<"OrderItem"> | number
-  status?: Prisma.EnumOrderStatusFilter<"OrderItem"> | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFilter<"OrderItem"> | $Enums.OrderItemStatus
   cookerId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
   order?: Prisma.XOR<Prisma.OrderScalarRelationFilter, Prisma.OrderWhereInput>
   food?: Prisma.XOR<Prisma.FoodScalarRelationFilter, Prisma.FoodWhereInput>
@@ -280,14 +280,14 @@ export type OrderItemScalarWhereWithAggregatesInput = {
   orderId?: Prisma.StringWithAggregatesFilter<"OrderItem"> | string
   foodId?: Prisma.StringWithAggregatesFilter<"OrderItem"> | string
   quantity?: Prisma.IntWithAggregatesFilter<"OrderItem"> | number
-  status?: Prisma.EnumOrderStatusWithAggregatesFilter<"OrderItem"> | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusWithAggregatesFilter<"OrderItem"> | $Enums.OrderItemStatus
   cookerId?: Prisma.StringNullableWithAggregatesFilter<"OrderItem"> | string | null
 }
 
 export type OrderItemCreateInput = {
   id?: string
   quantity: number
-  status?: $Enums.OrderStatus
+  status?: $Enums.OrderItemStatus
   order: Prisma.OrderCreateNestedOneWithoutItemsInput
   food: Prisma.FoodCreateNestedOneWithoutOrderItemInput
   removedIngredients?: Prisma.IngredientCreateNestedManyWithoutOrderItemToRemovedInput
@@ -299,7 +299,7 @@ export type OrderItemUncheckedCreateInput = {
   orderId: string
   foodId: string
   quantity: number
-  status?: $Enums.OrderStatus
+  status?: $Enums.OrderItemStatus
   cookerId?: string | null
   removedIngredients?: Prisma.IngredientUncheckedCreateNestedManyWithoutOrderItemToRemovedInput
 }
@@ -307,7 +307,7 @@ export type OrderItemUncheckedCreateInput = {
 export type OrderItemUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFieldUpdateOperationsInput | $Enums.OrderItemStatus
   order?: Prisma.OrderUpdateOneRequiredWithoutItemsNestedInput
   food?: Prisma.FoodUpdateOneRequiredWithoutOrderItemNestedInput
   removedIngredients?: Prisma.IngredientUpdateManyWithoutOrderItemToRemovedNestedInput
@@ -319,7 +319,7 @@ export type OrderItemUncheckedUpdateInput = {
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   foodId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFieldUpdateOperationsInput | $Enums.OrderItemStatus
   cookerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   removedIngredients?: Prisma.IngredientUncheckedUpdateManyWithoutOrderItemToRemovedNestedInput
 }
@@ -329,14 +329,14 @@ export type OrderItemCreateManyInput = {
   orderId: string
   foodId: string
   quantity: number
-  status?: $Enums.OrderStatus
+  status?: $Enums.OrderItemStatus
   cookerId?: string | null
 }
 
 export type OrderItemUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFieldUpdateOperationsInput | $Enums.OrderItemStatus
 }
 
 export type OrderItemUncheckedUpdateManyInput = {
@@ -344,7 +344,7 @@ export type OrderItemUncheckedUpdateManyInput = {
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   foodId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFieldUpdateOperationsInput | $Enums.OrderItemStatus
   cookerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -515,8 +515,8 @@ export type OrderItemUncheckedUpdateManyWithoutOrderNestedInput = {
   deleteMany?: Prisma.OrderItemScalarWhereInput | Prisma.OrderItemScalarWhereInput[]
 }
 
-export type EnumOrderStatusFieldUpdateOperationsInput = {
-  set?: $Enums.OrderStatus
+export type EnumOrderItemStatusFieldUpdateOperationsInput = {
+  set?: $Enums.OrderItemStatus
 }
 
 export type OrderItemCreateNestedManyWithoutCookerInput = {
@@ -564,7 +564,7 @@ export type OrderItemUncheckedUpdateManyWithoutCookerNestedInput = {
 export type OrderItemCreateWithoutFoodInput = {
   id?: string
   quantity: number
-  status?: $Enums.OrderStatus
+  status?: $Enums.OrderItemStatus
   order: Prisma.OrderCreateNestedOneWithoutItemsInput
   removedIngredients?: Prisma.IngredientCreateNestedManyWithoutOrderItemToRemovedInput
   cooker?: Prisma.UserCreateNestedOneWithoutCookerOrderItemsInput
@@ -574,7 +574,7 @@ export type OrderItemUncheckedCreateWithoutFoodInput = {
   id?: string
   orderId: string
   quantity: number
-  status?: $Enums.OrderStatus
+  status?: $Enums.OrderItemStatus
   cookerId?: string | null
   removedIngredients?: Prisma.IngredientUncheckedCreateNestedManyWithoutOrderItemToRemovedInput
 }
@@ -613,14 +613,14 @@ export type OrderItemScalarWhereInput = {
   orderId?: Prisma.StringFilter<"OrderItem"> | string
   foodId?: Prisma.StringFilter<"OrderItem"> | string
   quantity?: Prisma.IntFilter<"OrderItem"> | number
-  status?: Prisma.EnumOrderStatusFilter<"OrderItem"> | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFilter<"OrderItem"> | $Enums.OrderItemStatus
   cookerId?: Prisma.StringNullableFilter<"OrderItem"> | string | null
 }
 
 export type OrderItemCreateWithoutRemovedIngredientsInput = {
   id?: string
   quantity: number
-  status?: $Enums.OrderStatus
+  status?: $Enums.OrderItemStatus
   order: Prisma.OrderCreateNestedOneWithoutItemsInput
   food: Prisma.FoodCreateNestedOneWithoutOrderItemInput
   cooker?: Prisma.UserCreateNestedOneWithoutCookerOrderItemsInput
@@ -631,7 +631,7 @@ export type OrderItemUncheckedCreateWithoutRemovedIngredientsInput = {
   orderId: string
   foodId: string
   quantity: number
-  status?: $Enums.OrderStatus
+  status?: $Enums.OrderItemStatus
   cookerId?: string | null
 }
 
@@ -659,7 +659,7 @@ export type OrderItemUpdateManyWithWhereWithoutRemovedIngredientsInput = {
 export type OrderItemCreateWithoutOrderInput = {
   id?: string
   quantity: number
-  status?: $Enums.OrderStatus
+  status?: $Enums.OrderItemStatus
   food: Prisma.FoodCreateNestedOneWithoutOrderItemInput
   removedIngredients?: Prisma.IngredientCreateNestedManyWithoutOrderItemToRemovedInput
   cooker?: Prisma.UserCreateNestedOneWithoutCookerOrderItemsInput
@@ -669,7 +669,7 @@ export type OrderItemUncheckedCreateWithoutOrderInput = {
   id?: string
   foodId: string
   quantity: number
-  status?: $Enums.OrderStatus
+  status?: $Enums.OrderItemStatus
   cookerId?: string | null
   removedIngredients?: Prisma.IngredientUncheckedCreateNestedManyWithoutOrderItemToRemovedInput
 }
@@ -703,7 +703,7 @@ export type OrderItemUpdateManyWithWhereWithoutOrderInput = {
 export type OrderItemCreateWithoutCookerInput = {
   id?: string
   quantity: number
-  status?: $Enums.OrderStatus
+  status?: $Enums.OrderItemStatus
   order: Prisma.OrderCreateNestedOneWithoutItemsInput
   food: Prisma.FoodCreateNestedOneWithoutOrderItemInput
   removedIngredients?: Prisma.IngredientCreateNestedManyWithoutOrderItemToRemovedInput
@@ -714,7 +714,7 @@ export type OrderItemUncheckedCreateWithoutCookerInput = {
   orderId: string
   foodId: string
   quantity: number
-  status?: $Enums.OrderStatus
+  status?: $Enums.OrderItemStatus
   removedIngredients?: Prisma.IngredientUncheckedCreateNestedManyWithoutOrderItemToRemovedInput
 }
 
@@ -748,14 +748,14 @@ export type OrderItemCreateManyFoodInput = {
   id?: string
   orderId: string
   quantity: number
-  status?: $Enums.OrderStatus
+  status?: $Enums.OrderItemStatus
   cookerId?: string | null
 }
 
 export type OrderItemUpdateWithoutFoodInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFieldUpdateOperationsInput | $Enums.OrderItemStatus
   order?: Prisma.OrderUpdateOneRequiredWithoutItemsNestedInput
   removedIngredients?: Prisma.IngredientUpdateManyWithoutOrderItemToRemovedNestedInput
   cooker?: Prisma.UserUpdateOneWithoutCookerOrderItemsNestedInput
@@ -765,7 +765,7 @@ export type OrderItemUncheckedUpdateWithoutFoodInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFieldUpdateOperationsInput | $Enums.OrderItemStatus
   cookerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   removedIngredients?: Prisma.IngredientUncheckedUpdateManyWithoutOrderItemToRemovedNestedInput
 }
@@ -774,14 +774,14 @@ export type OrderItemUncheckedUpdateManyWithoutFoodInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFieldUpdateOperationsInput | $Enums.OrderItemStatus
   cookerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type OrderItemUpdateWithoutRemovedIngredientsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFieldUpdateOperationsInput | $Enums.OrderItemStatus
   order?: Prisma.OrderUpdateOneRequiredWithoutItemsNestedInput
   food?: Prisma.FoodUpdateOneRequiredWithoutOrderItemNestedInput
   cooker?: Prisma.UserUpdateOneWithoutCookerOrderItemsNestedInput
@@ -792,7 +792,7 @@ export type OrderItemUncheckedUpdateWithoutRemovedIngredientsInput = {
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   foodId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFieldUpdateOperationsInput | $Enums.OrderItemStatus
   cookerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -801,7 +801,7 @@ export type OrderItemUncheckedUpdateManyWithoutRemovedIngredientsInput = {
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   foodId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFieldUpdateOperationsInput | $Enums.OrderItemStatus
   cookerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -809,14 +809,14 @@ export type OrderItemCreateManyOrderInput = {
   id?: string
   foodId: string
   quantity: number
-  status?: $Enums.OrderStatus
+  status?: $Enums.OrderItemStatus
   cookerId?: string | null
 }
 
 export type OrderItemUpdateWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFieldUpdateOperationsInput | $Enums.OrderItemStatus
   food?: Prisma.FoodUpdateOneRequiredWithoutOrderItemNestedInput
   removedIngredients?: Prisma.IngredientUpdateManyWithoutOrderItemToRemovedNestedInput
   cooker?: Prisma.UserUpdateOneWithoutCookerOrderItemsNestedInput
@@ -826,7 +826,7 @@ export type OrderItemUncheckedUpdateWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   foodId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFieldUpdateOperationsInput | $Enums.OrderItemStatus
   cookerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   removedIngredients?: Prisma.IngredientUncheckedUpdateManyWithoutOrderItemToRemovedNestedInput
 }
@@ -835,7 +835,7 @@ export type OrderItemUncheckedUpdateManyWithoutOrderInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   foodId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFieldUpdateOperationsInput | $Enums.OrderItemStatus
   cookerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
@@ -844,13 +844,13 @@ export type OrderItemCreateManyCookerInput = {
   orderId: string
   foodId: string
   quantity: number
-  status?: $Enums.OrderStatus
+  status?: $Enums.OrderItemStatus
 }
 
 export type OrderItemUpdateWithoutCookerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFieldUpdateOperationsInput | $Enums.OrderItemStatus
   order?: Prisma.OrderUpdateOneRequiredWithoutItemsNestedInput
   food?: Prisma.FoodUpdateOneRequiredWithoutOrderItemNestedInput
   removedIngredients?: Prisma.IngredientUpdateManyWithoutOrderItemToRemovedNestedInput
@@ -861,7 +861,7 @@ export type OrderItemUncheckedUpdateWithoutCookerInput = {
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   foodId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFieldUpdateOperationsInput | $Enums.OrderItemStatus
   removedIngredients?: Prisma.IngredientUncheckedUpdateManyWithoutOrderItemToRemovedNestedInput
 }
 
@@ -870,7 +870,7 @@ export type OrderItemUncheckedUpdateManyWithoutCookerInput = {
   orderId?: Prisma.StringFieldUpdateOperationsInput | string
   foodId?: Prisma.StringFieldUpdateOperationsInput | string
   quantity?: Prisma.IntFieldUpdateOperationsInput | number
-  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
+  status?: Prisma.EnumOrderItemStatusFieldUpdateOperationsInput | $Enums.OrderItemStatus
 }
 
 
@@ -983,7 +983,7 @@ export type $OrderItemPayload<ExtArgs extends runtime.Types.Extensions.InternalA
     orderId: string
     foodId: string
     quantity: number
-    status: $Enums.OrderStatus
+    status: $Enums.OrderItemStatus
     cookerId: string | null
   }, ExtArgs["result"]["orderItem"]>
   composites: {}
@@ -1416,7 +1416,7 @@ export interface OrderItemFieldRefs {
   readonly orderId: Prisma.FieldRef<"OrderItem", 'String'>
   readonly foodId: Prisma.FieldRef<"OrderItem", 'String'>
   readonly quantity: Prisma.FieldRef<"OrderItem", 'Int'>
-  readonly status: Prisma.FieldRef<"OrderItem", 'OrderStatus'>
+  readonly status: Prisma.FieldRef<"OrderItem", 'OrderItemStatus'>
   readonly cookerId: Prisma.FieldRef<"OrderItem", 'String'>
 }
     

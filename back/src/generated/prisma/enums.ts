@@ -9,18 +9,18 @@
 */
 export const OrderStatus = {
   PENDING: 'PENDING',
-  IN_PROGRESS: 'IN_PROGRESS',
-  COMPLETED: 'COMPLETED',
-  CANCELLED: 'CANCELLED'
+  PAID: 'PAID',
+  COMPLETED: 'COMPLETED'
 } as const
 
 export type OrderStatus = (typeof OrderStatus)[keyof typeof OrderStatus]
 
 
-export const StripeStatus = {
+export const OrderItemStatus = {
   PENDING: 'PENDING',
-  PAID: 'PAID',
-  FAILED: 'FAILED'
+  IN_PROGRESS: 'IN_PROGRESS',
+  COMPLETED: 'COMPLETED',
+  CANCELLED: 'CANCELLED'
 } as const
 
-export type StripeStatus = (typeof StripeStatus)[keyof typeof StripeStatus]
+export type OrderItemStatus = (typeof OrderItemStatus)[keyof typeof OrderItemStatus]

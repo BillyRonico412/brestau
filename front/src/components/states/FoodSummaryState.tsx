@@ -99,14 +99,16 @@ export const FoodSummaryState = () => {
 						</div>
 						<div className="flex flex-1 flex-col gap-y-4">
 							<p>{foodQuery.data.description}</p>
-							<div className="flex items-center gap-x-8">
-								<p className="font-medium text-sm">Ingrédients</p>
-								<div className="flex flex-1 flex-wrap items-center gap-4">
-									{foodQuery.data.ingredients.map((ingredient) => (
-										<Ingredient key={ingredient.id} ingredient={ingredient} />
-									))}
+							{foodQuery.data.ingredients.length > 0 && (
+								<div className="flex items-center gap-x-8">
+									<p className="font-medium text-sm">Ingrédients</p>
+									<div className="flex flex-1 flex-wrap items-center gap-4">
+										{foodQuery.data.ingredients.map((ingredient) => (
+											<Ingredient key={ingredient.id} ingredient={ingredient} />
+										))}
+									</div>
 								</div>
-							</div>
+							)}
 							<div className="flex items-center gap-x-8">
 								<p className="font-medium text-sm">Particularités</p>
 								<div className="flex flex-1 flex-wrap items-center gap-4">

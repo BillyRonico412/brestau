@@ -1249,7 +1249,7 @@ export const OrderScalarFieldEnum = {
   id: 'id',
   counter: 'counter',
   stripeSessionId: 'stripeSessionId',
-  stripeStatus: 'stripeStatus',
+  status: 'status',
   serverId: 'serverId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -1414,16 +1414,16 @@ export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel,
 
 
 /**
- * Reference to a field of type 'StripeStatus'
+ * Reference to a field of type 'OrderStatus'
  */
-export type EnumStripeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StripeStatus'>
+export type EnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus'>
     
 
 
 /**
- * Reference to a field of type 'StripeStatus[]'
+ * Reference to a field of type 'OrderStatus[]'
  */
-export type ListEnumStripeStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'StripeStatus[]'>
+export type ListEnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus[]'>
     
 
 
@@ -1442,16 +1442,16 @@ export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaM
 
 
 /**
- * Reference to a field of type 'OrderStatus'
+ * Reference to a field of type 'OrderItemStatus'
  */
-export type EnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus'>
+export type EnumOrderItemStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderItemStatus'>
     
 
 
 /**
- * Reference to a field of type 'OrderStatus[]'
+ * Reference to a field of type 'OrderItemStatus[]'
  */
-export type ListEnumOrderStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderStatus[]'>
+export type ListEnumOrderItemStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'OrderItemStatus[]'>
     
 
 /**

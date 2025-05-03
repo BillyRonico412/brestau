@@ -52,15 +52,7 @@ const columns: ColumnDef<Food>[] = [
 	},
 	{
 		accessorKey: "image",
-		header: ({ column }) => (
-			<Button
-				variant="ghost"
-				onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-			>
-				Image
-				<ArrowUpDownIcon />
-			</Button>
-		),
+		header: "Image",
 		cell: ({ row }) => (
 			<img
 				src={row.original.image}

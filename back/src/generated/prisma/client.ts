@@ -95,5 +95,5 @@ export type Verification = Prisma.VerificationModel
 export type OrderStatus = $Enums.OrderStatus
 export const OrderStatus = $Enums.OrderStatus
 
-export type StripeStatus = $Enums.StripeStatus
-export const StripeStatus = $Enums.StripeStatus
+export type OrderItemStatus = $Enums.OrderItemStatus
+export const OrderItemStatus = $Enums.OrderItemStatus

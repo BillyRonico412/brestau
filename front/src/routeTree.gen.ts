@@ -14,7 +14,9 @@ import { Route as rootRoute } from './routes/__root'
 import { Route as LoginImport } from './routes/login'
 import { Route as AdminRouteImport } from './routes/admin/route'
 import { Route as IndexImport } from './routes/index'
+import { Route as ServerIndexImport } from './routes/server/index'
 import { Route as CookIndexImport } from './routes/cook/index'
+import { Route as ClientIndexImport } from './routes/client/index'
 import { Route as PaymentSuccessImport } from './routes/payment/success'
 import { Route as PaymentCancelImport } from './routes/payment/cancel'
 import { Route as AdminSubcategoriesIndexImport } from './routes/admin/subcategories/index'
@@ -42,9 +44,21 @@ const IndexRoute = IndexImport.update({
   getParentRoute: () => rootRoute,
 } as any)
 
+const ServerIndexRoute = ServerIndexImport.update({
+  id: '/server/',
+  path: '/server/',
+  getParentRoute: () => rootRoute,
+} as any)
+
 const CookIndexRoute = CookIndexImport.update({
   id: '/cook/',
   path: '/cook/',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const ClientIndexRoute = ClientIndexImport.update({
+  id: '/client/',
+  path: '/client/',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -123,11 +137,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PaymentSuccessImport
       parentRoute: typeof rootRoute
     }
+    '/client/': {
+      id: '/client/'
+      path: '/client'
+      fullPath: '/client'
+      preLoaderRoute: typeof ClientIndexImport
+      parentRoute: typeof rootRoute
+    }
     '/cook/': {
       id: '/cook/'
       path: '/cook'
       fullPath: '/cook'
       preLoaderRoute: typeof CookIndexImport
+      parentRoute: typeof rootRoute
+    }
+    '/server/': {
+      id: '/server/'
+      path: '/server'
+      fullPath: '/server'
+      preLoaderRoute: typeof ServerIndexImport
       parentRoute: typeof rootRoute
     }
     '/admin/categories/': {
@@ -187,7 +215,9 @@ export interface FileRoutesByFullPath {
   '/login': typeof LoginRoute
   '/payment/cancel': typeof PaymentCancelRoute
   '/payment/success': typeof PaymentSuccessRoute
+  '/client': typeof ClientIndexRoute
   '/cook': typeof CookIndexRoute
+  '/server': typeof ServerIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/foods': typeof AdminFoodsIndexRoute
   '/admin/ingredients': typeof AdminIngredientsIndexRoute
@@ -200,7 +230,9 @@ export interface FileRoutesByTo {
   '/login': typeof LoginRoute
   '/payment/cancel': typeof PaymentCancelRoute
   '/payment/success': typeof PaymentSuccessRoute
+  '/client': typeof ClientIndexRoute
   '/cook': typeof CookIndexRoute
+  '/server': typeof ServerIndexRoute
   '/admin/categories': typeof AdminCategoriesIndexRoute
   '/admin/foods': typeof AdminFoodsIndexRoute
   '/admin/ingredients': typeof AdminIngredientsIndexRoute
@@ -214,7 +246,9 @@ export interface FileRoutesById {
   '/login': typeof LoginRoute
   '/payment/cancel': typeof PaymentCancelRoute
   '/payment/success': typeof PaymentSuccessRoute
+  '/client/': typeof ClientIndexRoute
   '/cook/': typeof CookIndexRoute
+  '/server/': typeof ServerIndexRoute
   '/admin/categories/': typeof AdminCategoriesIndexRoute
   '/admin/foods/': typeof AdminFoodsIndexRoute
   '/admin/ingredients/': typeof AdminIngredientsIndexRoute
@@ -229,7 +263,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/payment/cancel'
     | '/payment/success'
+    | '/client'
     | '/cook'
+    | '/server'
     | '/admin/categories'
     | '/admin/foods'
     | '/admin/ingredients'
@@ -241,7 +277,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/payment/cancel'
     | '/payment/success'
+    | '/client'
     | '/cook'
+    | '/server'
     | '/admin/categories'
     | '/admin/foods'
     | '/admin/ingredients'
@@ -253,7 +291,9 @@ export interface FileRouteTypes {
     | '/login'
     | '/payment/cancel'
     | '/payment/success'
+    | '/client/'
     | '/cook/'
+    | '/server/'
     | '/admin/categories/'
     | '/admin/foods/'
     | '/admin/ingredients/'
@@ -267,7 +307,9 @@ export interface RootRouteChildren {
   LoginRoute: typeof LoginRoute
   PaymentCancelRoute: typeof PaymentCancelRoute
   PaymentSuccessRoute: typeof PaymentSuccessRoute
+  ClientIndexRoute: typeof ClientIndexRoute
   CookIndexRoute: typeof CookIndexRoute
+  ServerIndexRoute: typeof ServerIndexRoute
 }
 
 const rootRouteChildren: RootRouteChildren = {
@@ -276,7 +318,9 @@ const rootRouteChildren: RootRouteChildren = {
   LoginRoute: LoginRoute,
   PaymentCancelRoute: PaymentCancelRoute,
   PaymentSuccessRoute: PaymentSuccessRoute,
+  ClientIndexRoute: ClientIndexRoute,
   CookIndexRoute: CookIndexRoute,
+  ServerIndexRoute: ServerIndexRoute,
 }
 
 export const routeTree = rootRoute
@@ -294,7 +338,9 @@ export const routeTree = rootRoute
         "/login",
         "/payment/cancel",
         "/payment/success",
-        "/cook/"
+        "/client/",
+        "/cook/",
+        "/server/"
       ]
     },
     "/": {
@@ -318,8 +364,14 @@ export const routeTree = rootRoute
     "/payment/success": {
       "filePath": "payment/success.tsx"
     },
+    "/client/": {
+      "filePath": "client/index.tsx"
+    },
     "/cook/": {
       "filePath": "cook/index.tsx"
+    },
+    "/server/": {
+      "filePath": "server/index.tsx"
     },
     "/admin/categories/": {
       "filePath": "admin/categories/index.tsx",

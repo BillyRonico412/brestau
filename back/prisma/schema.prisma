@@ -60,40 +60,40 @@ model Ingredient {
 
 enum OrderStatus {
   PENDING
+  PAID
+  COMPLETED
+}
+
+enum OrderItemStatus {
+  PENDING
   IN_PROGRESS
   COMPLETED
   CANCELLED
 }
 
-enum StripeStatus {
-  PENDING
-  PAID
-  FAILED
-}
-
 model Order {
-  id              String       @id @default(cuid())
-  counter         Int          @default(autoincrement())
+  id              String      @id @default(cuid())
+  counter         Int         @default(autoincrement())
   items           OrderItem[]
   stripeSessionId String
-  stripeStatus    StripeStatus @default(PENDING)
+  status          OrderStatus @default(PENDING)
   serverId        String?
-  server          User?        @relation(fields: [serverId], references: [id], onDelete: SetNull)
-  createdAt       DateTime     @default(now())
-  updatedAt       DateTime     @updatedAt
+  server          User?       @relation(fields: [serverId], references: [id], onDelete: SetNull)
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
 }
 
 model OrderItem {
-  id                 String       @id @default(cuid())
+  id                 String          @id @default(cuid())
   orderId            String
-  order              Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  order              Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
   foodId             String
-  food               Food         @relation(fields: [foodId], references: [id], onDelete: Cascade)
+  food               Food            @relation(fields: [foodId], references: [id], onDelete: Cascade)
   quantity           Int
-  status             OrderStatus  @default(PENDING)
+  status             OrderItemStatus @default(PENDING)
   removedIngredients Ingredient[]
   cookerId           String?
-  cooker             User?        @relation(fields: [cookerId], references: [id], onDelete: SetNull)
+  cooker             User?           @relation(fields: [cookerId], references: [id], onDelete: SetNull)
 }
 
 model User {

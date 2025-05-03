@@ -1,4 +1,4 @@
-import { OrderStatusSchema } from "@back/generated/zod"
+import { OrderItemStatusSchema } from "@back/generated/zod"
 import { prismaClient } from "@back/utils/prisma"
 import { createStripeSessionByOrder, stripe } from "@back/utils/stripe"
 import { eventEmitter, eventNames } from "@back/utils/subscription"
@@ -86,7 +86,7 @@ export const orderRouter = router({
 			const orderUpdated = await prismaClient.order.update({
 				where: { id: opts.input.id },
 				data: {
-					stripeStatus: "PAID",
+					status: "PAID",
 				},
 				include: {
 					items: {
@@ -130,11 +130,11 @@ export const orderRouter = router({
 	getOrderItems: cookProcedure.query(async () => {
 		const orders = await prismaClient.order.findMany({
 			where: {
-				stripeStatus: "PAID",
+				status: "PAID",
 				items: {
 					some: {
 						status: {
-							in: ["IN_PROGRESS", "PENDING"],
+							in: ["IN_PROGRESS", "PENDING", "COMPLETED"],
 						},
 					},
 				},
@@ -163,7 +163,7 @@ export const orderRouter = router({
 		.input(
 			z.object({
 				orderItemId: z.string(),
-				orderItemStatus: OrderStatusSchema,
+				orderItemStatus: OrderItemStatusSchema,
 				cookerId: z.string(),
 			}),
 		)
@@ -185,5 +185,62 @@ export const orderRouter = router({
 			}
 			eventEmitter.emit(eventNames.ORDER_UPDATED)
 			return orderItem
+		}),
+	getOrderClientInfos: publicProcedure.query(async () => {
+		const orders = await prismaClient.order.findMany({
+			where: {
+				status: "PAID",
+			},
+			include: {
+				items: {
+					select: {
+						status: true,
+					},
+				},
+			},
+		})
+		const pendingCounters: number[] = []
+		const inProgressCounters: number[] = []
+		const completedCounters: number[] = []
+
+		for (const order of orders) {
+			if (order.items.every((item) => item.status === "PENDING")) {
+				pendingCounters.push(order.counter)
+				continue
+			}
+			if (order.items.every((item) => item.status === "COMPLETED")) {
+				completedCounters.push(order.counter)
+				continue
+			}
+			inProgressCounters.push(order.counter)
+		}
+
+		return { pendingCounters, inProgressCounters, completedCounters }
+	}),
+	completeOrder: cookProcedure
+		.input(
+			z.object({
+				orderId: z.string(),
+				serverId: z.string(),
+			}),
+		)
+		.mutation(async (opts) => {
+			const order = await prismaClient.order.update({
+				where: {
+					id: opts.input.orderId,
+				},
+				data: {
+					status: "COMPLETED",
+					serverId: opts.input.serverId,
+				},
+			})
+			if (!order) {
+				throw new TRPCError({
+					code: "NOT_FOUND",
+					message: "Order not found",
+				})
+			}
+			eventEmitter.emit(eventNames.ORDER_UPDATED)
+			return order
 		}),
 })

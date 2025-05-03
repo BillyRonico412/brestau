@@ -37,7 +37,7 @@ export type OrderMinAggregateOutputType = {
   id: string | null
   counter: number | null
   stripeSessionId: string | null
-  stripeStatus: $Enums.StripeStatus | null
+  status: $Enums.OrderStatus | null
   serverId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -47,7 +47,7 @@ export type OrderMaxAggregateOutputType = {
   id: string | null
   counter: number | null
   stripeSessionId: string | null
-  stripeStatus: $Enums.StripeStatus | null
+  status: $Enums.OrderStatus | null
   serverId: string | null
   createdAt: Date | null
   updatedAt: Date | null
@@ -57,7 +57,7 @@ export type OrderCountAggregateOutputType = {
   id: number
   counter: number
   stripeSessionId: number
-  stripeStatus: number
+  status: number
   serverId: number
   createdAt: number
   updatedAt: number
@@ -77,7 +77,7 @@ export type OrderMinAggregateInputType = {
   id?: true
   counter?: true
   stripeSessionId?: true
-  stripeStatus?: true
+  status?: true
   serverId?: true
   createdAt?: true
   updatedAt?: true
@@ -87,7 +87,7 @@ export type OrderMaxAggregateInputType = {
   id?: true
   counter?: true
   stripeSessionId?: true
-  stripeStatus?: true
+  status?: true
   serverId?: true
   createdAt?: true
   updatedAt?: true
@@ -97,7 +97,7 @@ export type OrderCountAggregateInputType = {
   id?: true
   counter?: true
   stripeSessionId?: true
-  stripeStatus?: true
+  status?: true
   serverId?: true
   createdAt?: true
   updatedAt?: true
@@ -194,7 +194,7 @@ export type OrderGroupByOutputType = {
   id: string
   counter: number
   stripeSessionId: string
-  stripeStatus: $Enums.StripeStatus
+  status: $Enums.OrderStatus
   serverId: string | null
   createdAt: Date
   updatedAt: Date
@@ -227,7 +227,7 @@ export type OrderWhereInput = {
   id?: Prisma.StringFilter<"Order"> | string
   counter?: Prisma.IntFilter<"Order"> | number
   stripeSessionId?: Prisma.StringFilter<"Order"> | string
-  stripeStatus?: Prisma.EnumStripeStatusFilter<"Order"> | $Enums.StripeStatus
+  status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   serverId?: Prisma.StringNullableFilter<"Order"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
@@ -239,7 +239,7 @@ export type OrderOrderByWithRelationInput = {
   id?: Prisma.SortOrder
   counter?: Prisma.SortOrder
   stripeSessionId?: Prisma.SortOrder
-  stripeStatus?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   serverId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -254,7 +254,7 @@ export type OrderWhereUniqueInput = Prisma.AtLeast<{
   NOT?: Prisma.OrderWhereInput | Prisma.OrderWhereInput[]
   counter?: Prisma.IntFilter<"Order"> | number
   stripeSessionId?: Prisma.StringFilter<"Order"> | string
-  stripeStatus?: Prisma.EnumStripeStatusFilter<"Order"> | $Enums.StripeStatus
+  status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   serverId?: Prisma.StringNullableFilter<"Order"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
@@ -266,7 +266,7 @@ export type OrderOrderByWithAggregationInput = {
   id?: Prisma.SortOrder
   counter?: Prisma.SortOrder
   stripeSessionId?: Prisma.SortOrder
-  stripeStatus?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   serverId?: Prisma.SortOrderInput | Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -284,7 +284,7 @@ export type OrderScalarWhereWithAggregatesInput = {
   id?: Prisma.StringWithAggregatesFilter<"Order"> | string
   counter?: Prisma.IntWithAggregatesFilter<"Order"> | number
   stripeSessionId?: Prisma.StringWithAggregatesFilter<"Order"> | string
-  stripeStatus?: Prisma.EnumStripeStatusWithAggregatesFilter<"Order"> | $Enums.StripeStatus
+  status?: Prisma.EnumOrderStatusWithAggregatesFilter<"Order"> | $Enums.OrderStatus
   serverId?: Prisma.StringNullableWithAggregatesFilter<"Order"> | string | null
   createdAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Order"> | Date | string
@@ -294,7 +294,7 @@ export type OrderCreateInput = {
   id?: string
   counter?: number
   stripeSessionId: string
-  stripeStatus?: $Enums.StripeStatus
+  status?: $Enums.OrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
@@ -305,7 +305,7 @@ export type OrderUncheckedCreateInput = {
   id?: string
   counter?: number
   stripeSessionId: string
-  stripeStatus?: $Enums.StripeStatus
+  status?: $Enums.OrderStatus
   serverId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -316,7 +316,7 @@ export type OrderUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   counter?: Prisma.IntFieldUpdateOperationsInput | number
   stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  stripeStatus?: Prisma.EnumStripeStatusFieldUpdateOperationsInput | $Enums.StripeStatus
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
@@ -327,7 +327,7 @@ export type OrderUncheckedUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   counter?: Prisma.IntFieldUpdateOperationsInput | number
   stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  stripeStatus?: Prisma.EnumStripeStatusFieldUpdateOperationsInput | $Enums.StripeStatus
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   serverId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -338,7 +338,7 @@ export type OrderCreateManyInput = {
   id?: string
   counter?: number
   stripeSessionId: string
-  stripeStatus?: $Enums.StripeStatus
+  status?: $Enums.OrderStatus
   serverId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -348,7 +348,7 @@ export type OrderUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   counter?: Prisma.IntFieldUpdateOperationsInput | number
   stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  stripeStatus?: Prisma.EnumStripeStatusFieldUpdateOperationsInput | $Enums.StripeStatus
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -357,7 +357,7 @@ export type OrderUncheckedUpdateManyInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   counter?: Prisma.IntFieldUpdateOperationsInput | number
   stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  stripeStatus?: Prisma.EnumStripeStatusFieldUpdateOperationsInput | $Enums.StripeStatus
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   serverId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -367,7 +367,7 @@ export type OrderCountOrderByAggregateInput = {
   id?: Prisma.SortOrder
   counter?: Prisma.SortOrder
   stripeSessionId?: Prisma.SortOrder
-  stripeStatus?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   serverId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -381,7 +381,7 @@ export type OrderMaxOrderByAggregateInput = {
   id?: Prisma.SortOrder
   counter?: Prisma.SortOrder
   stripeSessionId?: Prisma.SortOrder
-  stripeStatus?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   serverId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -391,7 +391,7 @@ export type OrderMinOrderByAggregateInput = {
   id?: Prisma.SortOrder
   counter?: Prisma.SortOrder
   stripeSessionId?: Prisma.SortOrder
-  stripeStatus?: Prisma.SortOrder
+  status?: Prisma.SortOrder
   serverId?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
@@ -416,8 +416,8 @@ export type OrderOrderByRelationAggregateInput = {
   _count?: Prisma.SortOrder
 }
 
-export type EnumStripeStatusFieldUpdateOperationsInput = {
-  set?: $Enums.StripeStatus
+export type EnumOrderStatusFieldUpdateOperationsInput = {
+  set?: $Enums.OrderStatus
 }
 
 export type DateTimeFieldUpdateOperationsInput = {
@@ -488,7 +488,7 @@ export type OrderCreateWithoutItemsInput = {
   id?: string
   counter?: number
   stripeSessionId: string
-  stripeStatus?: $Enums.StripeStatus
+  status?: $Enums.OrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   server?: Prisma.UserCreateNestedOneWithoutServerOrdersInput
@@ -498,7 +498,7 @@ export type OrderUncheckedCreateWithoutItemsInput = {
   id?: string
   counter?: number
   stripeSessionId: string
-  stripeStatus?: $Enums.StripeStatus
+  status?: $Enums.OrderStatus
   serverId?: string | null
   createdAt?: Date | string
   updatedAt?: Date | string
@@ -524,7 +524,7 @@ export type OrderUpdateWithoutItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   counter?: Prisma.IntFieldUpdateOperationsInput | number
   stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  stripeStatus?: Prisma.EnumStripeStatusFieldUpdateOperationsInput | $Enums.StripeStatus
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   server?: Prisma.UserUpdateOneWithoutServerOrdersNestedInput
@@ -534,7 +534,7 @@ export type OrderUncheckedUpdateWithoutItemsInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   counter?: Prisma.IntFieldUpdateOperationsInput | number
   stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  stripeStatus?: Prisma.EnumStripeStatusFieldUpdateOperationsInput | $Enums.StripeStatus
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   serverId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
@@ -544,7 +544,7 @@ export type OrderCreateWithoutServerInput = {
   id?: string
   counter?: number
   stripeSessionId: string
-  stripeStatus?: $Enums.StripeStatus
+  status?: $Enums.OrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.OrderItemCreateNestedManyWithoutOrderInput
@@ -554,7 +554,7 @@ export type OrderUncheckedCreateWithoutServerInput = {
   id?: string
   counter?: number
   stripeSessionId: string
-  stripeStatus?: $Enums.StripeStatus
+  status?: $Enums.OrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutOrderInput
@@ -593,7 +593,7 @@ export type OrderScalarWhereInput = {
   id?: Prisma.StringFilter<"Order"> | string
   counter?: Prisma.IntFilter<"Order"> | number
   stripeSessionId?: Prisma.StringFilter<"Order"> | string
-  stripeStatus?: Prisma.EnumStripeStatusFilter<"Order"> | $Enums.StripeStatus
+  status?: Prisma.EnumOrderStatusFilter<"Order"> | $Enums.OrderStatus
   serverId?: Prisma.StringNullableFilter<"Order"> | string | null
   createdAt?: Prisma.DateTimeFilter<"Order"> | Date | string
   updatedAt?: Prisma.DateTimeFilter<"Order"> | Date | string
@@ -603,7 +603,7 @@ export type OrderCreateManyServerInput = {
   id?: string
   counter?: number
   stripeSessionId: string
-  stripeStatus?: $Enums.StripeStatus
+  status?: $Enums.OrderStatus
   createdAt?: Date | string
   updatedAt?: Date | string
 }
@@ -612,7 +612,7 @@ export type OrderUpdateWithoutServerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   counter?: Prisma.IntFieldUpdateOperationsInput | number
   stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  stripeStatus?: Prisma.EnumStripeStatusFieldUpdateOperationsInput | $Enums.StripeStatus
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUpdateManyWithoutOrderNestedInput
@@ -622,7 +622,7 @@ export type OrderUncheckedUpdateWithoutServerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   counter?: Prisma.IntFieldUpdateOperationsInput | number
   stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  stripeStatus?: Prisma.EnumStripeStatusFieldUpdateOperationsInput | $Enums.StripeStatus
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutOrderNestedInput
@@ -632,7 +632,7 @@ export type OrderUncheckedUpdateManyWithoutServerInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   counter?: Prisma.IntFieldUpdateOperationsInput | number
   stripeSessionId?: Prisma.StringFieldUpdateOperationsInput | string
-  stripeStatus?: Prisma.EnumStripeStatusFieldUpdateOperationsInput | $Enums.StripeStatus
+  status?: Prisma.EnumOrderStatusFieldUpdateOperationsInput | $Enums.OrderStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
 }
@@ -672,7 +672,7 @@ export type OrderSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = 
   id?: boolean
   counter?: boolean
   stripeSessionId?: boolean
-  stripeStatus?: boolean
+  status?: boolean
   serverId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -685,7 +685,7 @@ export type OrderSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   counter?: boolean
   stripeSessionId?: boolean
-  stripeStatus?: boolean
+  status?: boolean
   serverId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -696,7 +696,7 @@ export type OrderSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensi
   id?: boolean
   counter?: boolean
   stripeSessionId?: boolean
-  stripeStatus?: boolean
+  status?: boolean
   serverId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
@@ -707,13 +707,13 @@ export type OrderSelectScalar = {
   id?: boolean
   counter?: boolean
   stripeSessionId?: boolean
-  stripeStatus?: boolean
+  status?: boolean
   serverId?: boolean
   createdAt?: boolean
   updatedAt?: boolean
 }
 
-export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "counter" | "stripeSessionId" | "stripeStatus" | "serverId" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
+export type OrderOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "counter" | "stripeSessionId" | "status" | "serverId" | "createdAt" | "updatedAt", ExtArgs["result"]["order"]>
 export type OrderInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   items?: boolean | Prisma.Order$itemsArgs<ExtArgs>
   server?: boolean | Prisma.Order$serverArgs<ExtArgs>
@@ -736,7 +736,7 @@ export type $OrderPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs 
     id: string
     counter: number
     stripeSessionId: string
-    stripeStatus: $Enums.StripeStatus
+    status: $Enums.OrderStatus
     serverId: string | null
     createdAt: Date
     updatedAt: Date
@@ -1168,7 +1168,7 @@ export interface OrderFieldRefs {
   readonly id: Prisma.FieldRef<"Order", 'String'>
   readonly counter: Prisma.FieldRef<"Order", 'Int'>
   readonly stripeSessionId: Prisma.FieldRef<"Order", 'String'>
-  readonly stripeStatus: Prisma.FieldRef<"Order", 'StripeStatus'>
+  readonly status: Prisma.FieldRef<"Order", 'OrderStatus'>
   readonly serverId: Prisma.FieldRef<"Order", 'String'>
   readonly createdAt: Prisma.FieldRef<"Order", 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<"Order", 'DateTime'>
