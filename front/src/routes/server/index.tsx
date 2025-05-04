@@ -67,7 +67,7 @@ function RouteComponent() {
 	)
 
 	useSubscription(
-		trpc.order.notifyCreateOrder.subscriptionOptions(undefined, {
+		trpc.order.notifyOrderReadyToCompleted.subscriptionOptions(undefined, {
 			enabled: true,
 			onData() {
 				notificationSound.play()

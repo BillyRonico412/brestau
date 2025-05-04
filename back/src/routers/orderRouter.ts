@@ -176,7 +176,21 @@ export const orderRouter = router({
 					status: opts.input.orderItemStatus,
 					cookerId: opts.input.cookerId,
 				},
+				select: {
+					order: {
+						select: {
+							items: {
+								select: {
+									status: true,
+								},
+							},
+						},
+					},
+				},
 			})
+			if (orderItem.order.items.every((item) => item.status === "COMPLETED")) {
+				eventEmitter.emit(eventNames.ORDER_READY_TO_COMPLETED)
+			}
 			if (!orderItem) {
 				throw new TRPCError({
 					code: "NOT_FOUND",
@@ -185,6 +199,23 @@ export const orderRouter = router({
 			}
 			eventEmitter.emit(eventNames.ORDER_UPDATED)
 			return orderItem
+		}),
+	notifyOrderReadyToCompleted: cookProcedure
+		.output(
+			zAsyncIterable({
+				yield: z.number(),
+			}),
+		)
+		.subscription(async function* (opts) {
+			for await (const _ of on(
+				eventEmitter,
+				eventNames.ORDER_READY_TO_COMPLETED,
+				{
+					signal: opts.signal,
+				},
+			)) {
+				yield Date.now()
+			}
 		}),
 	getOrderClientInfos: publicProcedure.query(async () => {
 		const orders = await prismaClient.order.findMany({
