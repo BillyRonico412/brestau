@@ -72,14 +72,22 @@ const Ingredient = (props: {
 export const FoodSummaryState = () => {
 	const [state, send] = useAtom(machineAtom)
 	const foodQuery = useSuspenseQuery(
-		trpc.food.getById.queryOptions(
-			{
-				id: state.context.currentOrderItem?.foodId,
+		trpc.category.getAllForClient.queryOptions(undefined, {
+			select(data) {
+				const currentOrderItem = state.context.currentOrderItem
+				if (!currentOrderItem) {
+					throw new Error("No current order item")
+				}
+				const food = data
+					.flatMap((category) => category.subCategories)
+					.flatMap((subCategory) => subCategory.foods)
+					.find((food) => food.id === currentOrderItem.foodId)
+				if (!food) {
+					throw new Error("Food not found")
+				}
+				return food
 			},
-			{
-				enabled: !!state.context.currentOrderItem?.foodId,
-			},
-		),
+		}),
 	)
 	if (!state.context.currentOrderItem) {
 		throw new Error("No food selected")

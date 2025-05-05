@@ -49,14 +49,22 @@ const FoodCard = (
 export const FoodSelectionState = () => {
 	const state = useAtomValue(machineAtom)
 	const foodsQuery = useSuspenseQuery(
-		trpc.food.getBySubCategoryId.queryOptions(
-			{
-				subCategoryId: state.context.currentSubCategoryId,
+		trpc.category.getAllForClient.queryOptions(undefined, {
+			select(data) {
+				if (!state.context.currentSubCategoryId) {
+					throw new Error("No sub category selected")
+				}
+				const subCategory = data
+					.flatMap((category) => category.subCategories)
+					.find((subCategory) => {
+						return subCategory.id === state.context.currentSubCategoryId
+					})
+				if (!subCategory) {
+					throw new Error("Sub category not found")
+				}
+				return subCategory
 			},
-			{
-				enabled: !!state.context.currentSubCategoryId,
-			},
-		),
+		}),
 	)
 	return (
 		<SelectionLayout>

@@ -84,28 +84,31 @@ const FoodCard = (props: {
 export const OrderingState = () => {
 	const [state, send] = useAtom(machineAtom)
 	const foodByIdsQuery = useSuspenseQuery(
-		trpc.food.getByIds.queryOptions(
-			{
-				ids: state.context.order.map((item) => item.foodId),
+		trpc.category.getAllForClient.queryOptions(undefined, {
+			select(data) {
+				const foodIds = state.context.order.map((orderItem) => orderItem.foodId)
+				const foods = data
+					.flatMap((category) => category.subCategories)
+					.flatMap((subCategory) => subCategory.foods)
+					.filter((food) => foodIds.includes(food.id))
+				if (foods.length !== foodIds.length) {
+					throw new Error("Some foods not found")
+				}
+				return foods.map((food) => {
+					const orderItem = state.context.order.find(
+						(orderItem) => orderItem.foodId === food.id,
+					)
+					if (!orderItem) {
+						throw new Error("Order item not found")
+					}
+					const total = food.price * orderItem.quantity
+					return {
+						food,
+						total,
+					}
+				})
 			},
-			{
-				select(data) {
-					return data.map((food) => {
-						const orderItem = state.context.order.find(
-							(item) => item.foodId === food.id,
-						)
-						if (!orderItem) {
-							throw new Error("Order item not found")
-						}
-						return {
-							food,
-							quantity: orderItem.quantity,
-							total: food.price * orderItem.quantity,
-						}
-					})
-				},
-			},
-		),
+		}),
 	)
 	const orderMutation = useMutation(
 		trpc.order.createOrder.mutationOptions({

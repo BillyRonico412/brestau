@@ -13,7 +13,7 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import { useAtomValue, useSetAtom } from "jotai"
 
 const SubCategoryCard = (
-	props: Outputs["subCategory"]["getByCategoryId"]["subCategories"][number],
+	props: Outputs["category"]["getAllForClient"][number]["subCategories"][number],
 ) => {
 	const send = useSetAtom(machineAtom)
 	return (
@@ -43,14 +43,20 @@ const SubCategoryCard = (
 export const SubCategorySelectionState = () => {
 	const state = useAtomValue(machineAtom)
 	const subCategoriesQuery = useSuspenseQuery(
-		trpc.subCategory.getByCategoryId.queryOptions(
-			{
-				categoryId: state.context.currentCategoryId,
+		trpc.category.getAllForClient.queryOptions(undefined, {
+			select(data) {
+				if (!state.context.currentCategoryId) {
+					throw new Error("No category selected")
+				}
+				const category = data.find((category) => {
+					return category.id === state.context.currentCategoryId
+				})
+				if (!category) {
+					throw new Error("Category not found")
+				}
+				return category
 			},
-			{
-				enabled: !!state.context.currentCategoryId,
-			},
-		),
+		}),
 	)
 	return (
 		<SelectionLayout>

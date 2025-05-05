@@ -65,4 +65,20 @@ export const categoryRouter = router({
 				},
 			})
 		}),
+	getAllForClient: publicProcedure.query(async () => {
+		const categories = await prismaClient.category.findMany({
+			include: {
+				subCategories: {
+					include: {
+						foods: {
+							include: {
+								ingredients: true,
+							},
+						},
+					},
+				},
+			},
+		})
+		return categories
+	}),
 })

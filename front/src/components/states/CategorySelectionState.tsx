@@ -13,14 +13,16 @@ import { useSuspenseQuery } from "@tanstack/react-query"
 import { useSetAtom } from "jotai"
 
 export const CategorySelectionState = () => {
-	const categoriesQuery = useSuspenseQuery(trpc.category.getAll.queryOptions())
+	const superCategoriesQuery = useSuspenseQuery(
+		trpc.category.getAllForClient.queryOptions(),
+	)
 	const send = useSetAtom(machineAtom)
 	return (
 		<SelectionLayout>
 			<SelectionHeader>Choisis une catégorie</SelectionHeader>
 			<SelectionBody>
 				<div className="flex flex-wrap items-center gap-4">
-					{categoriesQuery.data.map((category) => (
+					{superCategoriesQuery.data.map((category) => (
 						<Button
 							key={category.id}
 							onClick={() => {
@@ -33,7 +35,7 @@ export const CategorySelectionState = () => {
 							{category.title}
 						</Button>
 					))}
-					{categoriesQuery.data.length === 0 && (
+					{superCategoriesQuery.data.length === 0 && (
 						<SelectionEmptyState
 							title="Aucune catégorie disponible"
 							description="Aucune catégorie disponible pour cette catégorie."
